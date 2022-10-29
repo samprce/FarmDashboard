@@ -1,5 +1,8 @@
 package uab.bogra.farmdashboard;
 
+import javafx.event.Event;
+import javafx.event.EventHandler;
+
 // Root
 // Barn[container] > Livestock Area[container] > Cow[item]
 // Barn[container] > Milk Storage[container]
@@ -40,13 +43,14 @@ public class MainController implements Initializable {
     @FXML
     Pane shapesPane;
 
-    ArrayList<Container> propertyArrayList = new ArrayList<>();
-    TextInputDialog newContainerDialog = new TextInputDialog();
+    ArrayList<Container> containerArrayList = new ArrayList<>();
+    ArrayList<Item> itemsArrayList = new ArrayList<>();
+    TextInputDialog newPropertyDialog = new TextInputDialog();
     TextInputDialog renameDialog = new TextInputDialog();
     TextInputDialog newItemDialog = new TextInputDialog();
 
     Image folderImage = new Image(getClass().getResourceAsStream("/folder.png"));
-    Image file = new Image(getClass().getResourceAsStream("/file.png"));
+    Image fileImage = new Image(getClass().getResourceAsStream("/file.png"));
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -59,21 +63,61 @@ public class MainController implements Initializable {
         Container root = new Container("Root");
         root.setDimensionX(800);
         root.setDimensionY(600);
-        propertyArrayList.add(root);
+        containerArrayList.add(root);
         treeView.setRoot(rootNode);
         rootNode.setExpanded(true);
+
+        treeView.setOnMouseClicked(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+                // TODO Auto-generated method stub
+                try {
+                    TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
+                    if (selectedItem.getGraphic().equals(fileImage)) {
+                        itemCommandsPane.setVisible(true);
+                        itemCommandsPane.setDisable(false);
+                        containerCommandsPane.setVisible(true);
+                        containerCommandsPane.setDisable(true);
+                    } else if (selectedItem.getGraphic().equals(folderImage)) {
+                        itemCommandsPane.setVisible(false);
+                        itemCommandsPane.setDisable(true);
+                        containerCommandsPane.setVisible(false);
+                        containerCommandsPane.setDisable(true);
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void addContainer() {
         try {
             TreeItem<String> selectedItem = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
-            newContainerDialog.setTitle("Add Item Container");
-            newContainerDialog.setHeaderText("Enter the name of the new item container:");
-            newContainerDialog.showAndWait().ifPresent(response -> {
+            newPropertyDialog.setTitle("Add Item Container");
+            newPropertyDialog.setHeaderText("Enter the name of the new item container:");
+            newPropertyDialog.showAndWait().ifPresent(response -> {
                 selectedItem.getChildren().add(new TreeItem<String>(response, new ImageView(folderImage)));
-                propertyArrayList.add(new Container(response));
-                newContainerDialog.getEditor().clear();
+                containerArrayList.add(new Container(response));
+                newPropertyDialog.getEditor().clear();
                 drawContainers();
+            });
+        } catch (NullPointerException e) {
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.setContentText("You must select an item from the tree.");
+            alert.show();
+        }
+    }
+
+    public void addItem() {
+        try {
+            TreeItem<String> selectedIteam = treeView.getSelectionModel().getSelectedItem();
+            newPropertyDialog.setTitle("Add Item");
+            newPropertyDialog.setHeaderText("Enter the name of the new item:");
+            newPropertyDialog.showAndWait().ifPresent(response -> {
+                selectedIteam.getChildren().add(new TreeItem<String>(response, new ImageView(fileImage)));
+                itemsArrayList.add(new Item(response));
+                newPropertyDialog.getEditor().clear();
             });
         } catch (NullPointerException e) {
             alert.setAlertType(Alert.AlertType.ERROR);
@@ -93,7 +137,7 @@ public class MainController implements Initializable {
                 renameDialog.setTitle("Rename");
                 renameDialog.setHeaderText("Enter the new name of the property: ");
                 renameDialog.showAndWait().ifPresent(response -> {
-                    for (Container c : propertyArrayList) {
+                    for (Container c : containerArrayList) {
                         if (c.getName().equals(selectedItem.getValue())) {
                             c.setName(response);
                         }
@@ -117,7 +161,7 @@ public class MainController implements Initializable {
                 alert.setContentText("You cannot delete the Root directory.");
                 alert.show();
             } else {
-                for (Iterator<Container> iterator = propertyArrayList.iterator(); iterator.hasNext();) {
+                for (Iterator<Container> iterator = containerArrayList.iterator(); iterator.hasNext();) {
                     Container container = iterator.next();
                     if (container.getName().equals(selectedItem.getValue())) {
                         iterator.remove();
@@ -168,7 +212,7 @@ public class MainController implements Initializable {
         Optional<Pair<Integer, Integer>> result = dialog.showAndWait();
 
         result.ifPresent(xAndY -> {
-            for (Container container : propertyArrayList) {
+            for (Container container : containerArrayList) {
                 if (container.getName().equals(selectedItemValue)) {
                     // System.out.println(container.getName());
                     // System.out.println(container.getLocationX());
@@ -220,7 +264,7 @@ public class MainController implements Initializable {
         Optional<Pair<Integer, Integer>> result = dialog.showAndWait();
 
         result.ifPresent(xAndY -> {
-            for (Container container : propertyArrayList) {
+            for (Container container : containerArrayList) {
                 if (container.getName().equals(selectedItemValue)) {
                     // System.out.println(container.getName());
                     // System.out.println(container.getDimensionX());
@@ -237,9 +281,9 @@ public class MainController implements Initializable {
         });
     }
 
-    public void drawContainers(){
-        for (Container container : propertyArrayList){
-            if (container.getName() != "Root"){
+    public void drawContainers() {
+        for (Container container : containerArrayList) {
+            if (container.getName() != "Root") {
                 Rectangle box = new Rectangle();
                 box.setX(container.getLocationX());
                 box.setY(container.getLocationY());
@@ -256,8 +300,8 @@ public class MainController implements Initializable {
         }
     }
 
-    public void removeContainerShapes(){
+    public void removeContainerShapes() {
         shapesPane.getChildren().clear();
         drawContainers();
-    } 
+    }
 }
