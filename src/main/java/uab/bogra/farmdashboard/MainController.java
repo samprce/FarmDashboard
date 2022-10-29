@@ -1,6 +1,5 @@
 package uab.bogra.farmdashboard;
 
-import javafx.event.Event;
 import javafx.event.EventHandler;
 
 // Root
@@ -15,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -60,29 +60,29 @@ public class MainController implements Initializable {
         itemCommandsPane.setDisable(true);
 
         TreeItem<String> rootNode = new TreeItem<>("Root", new ImageView(folderImage));
-        Container root = new Container("Root");
-        root.setDimensionX(800);
-        root.setDimensionY(600);
-        containerArrayList.add(root);
         treeView.setRoot(rootNode);
         rootNode.setExpanded(true);
 
-        treeView.setOnMouseClicked(new EventHandler<Event>() {
+        treeView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(Event event) {
-                // TODO Auto-generated method stub
+            public void handle(MouseEvent event) {
                 try {
                     TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
-                    if (selectedItem.getGraphic().equals(fileImage)) {
-                        itemCommandsPane.setVisible(true);
-                        itemCommandsPane.setDisable(false);
-                        containerCommandsPane.setVisible(true);
-                        containerCommandsPane.setDisable(true);
-                    } else if (selectedItem.getGraphic().equals(folderImage)) {
-                        itemCommandsPane.setVisible(false);
-                        itemCommandsPane.setDisable(true);
-                        containerCommandsPane.setVisible(false);
-                        containerCommandsPane.setDisable(true);
+                    for (Container container : containerArrayList) {
+                        if (container.getName().equals(selectedItem.getValue())) {
+                            containerCommandsPane.setVisible(true);
+                            containerCommandsPane.setDisable(false);
+                            itemCommandsPane.setVisible(false);
+                            itemCommandsPane.setDisable(true);
+                        }
+                    }
+                    for (Item item : itemsArrayList) {
+                        if (item.getName().equals(selectedItem.getValue())) {
+                            itemCommandsPane.setVisible(true);
+                            itemCommandsPane.setDisable(false);
+                            containerCommandsPane.setVisible(false);
+                            containerCommandsPane.setDisable(true);
+                        }
                     }
                 } catch (NullPointerException e) {
                     e.printStackTrace();
