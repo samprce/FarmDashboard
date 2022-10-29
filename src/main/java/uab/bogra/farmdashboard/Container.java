@@ -2,18 +2,34 @@ package uab.bogra.farmdashboard;
 
 import java.text.NumberFormat;
 
+import java.util.Random;
+
+import javafx.scene.shape.Rectangle;
+
 public class Container {
     private String name;
     private int locationX, locationY, dimensionX, dimensionY;
     private double price;
+    private Random random = new Random();
+    private int rand = random.nextInt(500);
+    private Rectangle box;
 
     public Container(String name) {
         this.name = name;
-        this.locationX = 300;
-        this.locationY = 400;
-        this.dimensionX = 25;
-        this.dimensionY = 50;
+        this.locationX = rand;
+        this.locationY = rand;
+        this.dimensionX = 100;
+        this.dimensionY = 100;
         this.price = 0.00;
+        this.box = new Rectangle();
+    }
+
+    public Rectangle getBox(){
+        return this.box;
+    }
+
+    public void setBox(Rectangle box){
+        this.box = box;
     }
 
     public String getName() {

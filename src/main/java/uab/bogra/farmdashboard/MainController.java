@@ -14,6 +14,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.util.Pair;
 
 import java.net.URL;
@@ -32,6 +36,9 @@ public class MainController implements Initializable {
 
     @FXML
     Alert alert = new Alert(Alert.AlertType.ERROR, "You must select an item from the tree.");
+
+    @FXML
+    Pane shapesPane;
 
     ArrayList<Container> propertyArrayList = new ArrayList<>();
     TextInputDialog newContainerDialog = new TextInputDialog();
@@ -66,6 +73,7 @@ public class MainController implements Initializable {
                 selectedItem.getChildren().add(new TreeItem<String>(response, new ImageView(folderImage)));
                 propertyArrayList.add(new Container(response));
                 newContainerDialog.getEditor().clear();
+                drawContainers();
             });
         } catch (NullPointerException e) {
             alert.setAlertType(Alert.AlertType.ERROR);
@@ -113,6 +121,7 @@ public class MainController implements Initializable {
                     Container container = iterator.next();
                     if (container.getName().equals(selectedItem.getValue())) {
                         iterator.remove();
+                        removeContainerShapes();
                     }
                 }
                 selectedItem.getParent().getChildren().remove(selectedItem);
@@ -223,4 +232,28 @@ public class MainController implements Initializable {
             }
         });
     }
+
+    public void drawContainers(){
+        for (Container container : propertyArrayList){
+            if (container.getName() != "Root"){
+                Rectangle box = new Rectangle();
+                box.setX(container.getLocationX());
+                box.setY(container.getLocationY());
+                box.setWidth(container.getDimensionX());
+                box.setHeight(container.getDimensionY());
+                box.setFill(Color.WHITE);
+                box.setStroke(Color.BLACK);
+                box.setStrokeWidth(1);
+                Text text = new Text(container.getName());
+                text.setX(container.getLocationX() + 35);
+                text.setY(container.getLocationY() + 25);
+                shapesPane.getChildren().addAll(box, text);
+            }
+        }
+    }
+
+    public void removeContainerShapes(){
+        shapesPane.getChildren().clear();
+        drawContainers();
+    } 
 }
