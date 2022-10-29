@@ -7,10 +7,14 @@ package uab.bogra.farmdashboard;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.util.Pair;
 
 import java.net.URL;
 import java.util.*;
@@ -30,11 +34,12 @@ public class MainController implements Initializable {
     Alert alert = new Alert(Alert.AlertType.ERROR, "You must select an item from the tree.");
 
     ArrayList<Container> propertyArrayList = new ArrayList<>();
-    TextInputDialog newContainerDialogue = new TextInputDialog();
-    TextInputDialog renameDialogue = new TextInputDialog();
+    TextInputDialog newContainerDialog = new TextInputDialog();
+    TextInputDialog renameDialog = new TextInputDialog();
+    TextInputDialog newItemDialog = new TextInputDialog();
 
     Image folderImage = new Image(getClass().getResourceAsStream("/folder.png"));
-    // Image file = new Image(getClass().getResourceAsStream("icons/file.png"));
+    Image file = new Image(getClass().getResourceAsStream("/file.png"));
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -55,12 +60,12 @@ public class MainController implements Initializable {
     public void addContainer() {
         try {
             TreeItem<String> selectedItem = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
-            newContainerDialogue.setTitle("Add Item Container");
-            newContainerDialogue.setHeaderText("Enter the name of the new item container:");
-            newContainerDialogue.showAndWait().ifPresent(response -> {
+            newContainerDialog.setTitle("Add Item Container");
+            newContainerDialog.setHeaderText("Enter the name of the new item container:");
+            newContainerDialog.showAndWait().ifPresent(response -> {
                 selectedItem.getChildren().add(new TreeItem<String>(response, new ImageView(folderImage)));
                 propertyArrayList.add(new Container(response));
-                newContainerDialogue.getEditor().clear();
+                newContainerDialog.getEditor().clear();
             });
         } catch (NullPointerException e) {
             alert.setAlertType(Alert.AlertType.ERROR);
@@ -77,18 +82,17 @@ public class MainController implements Initializable {
                 alert.setContentText("You cannot rename the Root directory.");
                 alert.show();
             } else {
-                renameDialogue.setTitle("Rename");
-                renameDialogue.setHeaderText("Enter the new name of the property: ");
-                renameDialogue.showAndWait().ifPresent(response -> {
+                renameDialog.setTitle("Rename");
+                renameDialog.setHeaderText("Enter the new name of the property: ");
+                renameDialog.showAndWait().ifPresent(response -> {
                     for (Container c : propertyArrayList) {
                         if (c.getName().equals(selectedItem.getValue())) {
                             c.setName(response);
                         }
                     }
                     selectedItem.setValue(response);
-                    renameDialogue.getEditor().clear();
+                    renameDialog.getEditor().clear();
                 });
-                printArrayList(propertyArrayList);
             }
         } catch (NullPointerException e) {
             alert.setAlertType(Alert.AlertType.ERROR);
@@ -120,9 +124,103 @@ public class MainController implements Initializable {
         }
     }
 
-    public void printArrayList(ArrayList<Container> arr) {
-        for (Container c : arr) {
-            System.out.println(c.getName());
-        }
+    public void changeLocation() {
+        String selectedItemValue = treeView.getSelectionModel().getSelectedItem().getValue();
+
+        Dialog<Pair<Integer, Integer>> dialog = new Dialog<>();
+        dialog.setTitle("Change Location");
+        dialog.setHeaderText("Enter the new location:");
+
+        ButtonType buttonOk = new ButtonType("OK", ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(buttonOk, ButtonType.CANCEL);
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField x = new TextField();
+        TextField y = new TextField();
+
+        gridPane.add(new Label("Location X"), 0, 0);
+        gridPane.add(x, 1, 0);
+        gridPane.add(new Label("Location Y"), 0, 1);
+        gridPane.add(y, 1, 1);
+
+        dialog.getDialogPane().setContent(gridPane);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == buttonOk) {
+                return new Pair<Integer, Integer>(Integer.parseInt(x.getText()), Integer.parseInt(y.getText()));
+            }
+            return null;
+        });
+
+        Optional<Pair<Integer, Integer>> result = dialog.showAndWait();
+
+        result.ifPresent(xAndY -> {
+            for (Container container : propertyArrayList) {
+                if (container.getName().equals(selectedItemValue)) {
+                    // System.out.println(container.getName());
+                    // System.out.println(container.getLocationX());
+                    // System.out.println(container.getLocationY());
+                    container.setLocationX(xAndY.getKey());
+                    container.setLocationY(xAndY.getValue());
+                    // System.out.println(container.getName());
+                    // System.out.println(container.getLocationX());
+                    // System.out.println(container.getLocationY());
+                }
+            }
+        });
+    }
+
+    public void changeDimension() {
+        String selectedItemValue = treeView.getSelectionModel().getSelectedItem().getValue();
+
+        Dialog<Pair<Integer, Integer>> dialog = new Dialog<>();
+        dialog.setTitle("Change Dimension");
+        dialog.setHeaderText("Enter the new dimensions:");
+
+        ButtonType buttonOk = new ButtonType("OK", ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(buttonOk, ButtonType.CANCEL);
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField x = new TextField();
+        TextField y = new TextField();
+
+        gridPane.add(new Label("Dimension X"), 0, 0);
+        gridPane.add(x, 1, 0);
+        gridPane.add(new Label("Dimension Y"), 0, 1);
+        gridPane.add(y, 1, 1);
+
+        dialog.getDialogPane().setContent(gridPane);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == buttonOk) {
+                return new Pair<Integer, Integer>(Integer.parseInt(x.getText()), Integer.parseInt(y.getText()));
+            }
+            return null;
+        });
+
+        Optional<Pair<Integer, Integer>> result = dialog.showAndWait();
+
+        result.ifPresent(xAndY -> {
+            for (Container container : propertyArrayList) {
+                if (container.getName().equals(selectedItemValue)) {
+                    // System.out.println(container.getName());
+                    // System.out.println(container.getDimensionX());
+                    // System.out.println(container.getDimensionY());
+                    container.setDimensionX(xAndY.getKey());
+                    container.setDimensionY(xAndY.getValue());
+                    // System.out.println(container.getName());
+                    // System.out.println(container.getDimensionX());
+                    // System.out.println(container.getDimensionY());
+                }
+            }
+        });
     }
 }
