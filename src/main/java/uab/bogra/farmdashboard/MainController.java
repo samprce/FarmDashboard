@@ -180,6 +180,8 @@ public class MainController implements Initializable {
                     // System.out.println(container.getLocationY());
                 }
             }
+            shapesPane.getChildren().clear();
+            drawContainers();
         });
     }
 
@@ -230,6 +232,8 @@ public class MainController implements Initializable {
                     // System.out.println(container.getDimensionY());
                 }
             }
+            shapesPane.getChildren().clear();
+            drawContainers();
         });
     }
 
@@ -245,8 +249,8 @@ public class MainController implements Initializable {
                 box.setStroke(Color.BLACK);
                 box.setStrokeWidth(1);
                 Text text = new Text(container.getName());
-                text.setX(container.getLocationX() + 35);
-                text.setY(container.getLocationY() + 25);
+                text.setX(container.getLocationX() + 5);
+                text.setY(container.getLocationY() + 15);
                 shapesPane.getChildren().addAll(box, text);
             }
         }
