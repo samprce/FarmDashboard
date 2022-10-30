@@ -118,6 +118,7 @@ public class MainController implements Initializable {
                 selectedIteam.getChildren().add(new TreeItem<String>(response, new ImageView(fileImage)));
                 itemsArrayList.add(new Item(response));
                 newPropertyDialog.getEditor().clear();
+                drawItemShapes();
             });
         } catch (NullPointerException e) {
             alert.setAlertType(Alert.AlertType.ERROR);
@@ -144,6 +145,7 @@ public class MainController implements Initializable {
                     }
                     selectedItem.setValue(response);
                     renameDialog.getEditor().clear();
+                    removeContainerAndItemShapes();
                 });
             }
         } catch (NullPointerException e) {
@@ -165,10 +167,10 @@ public class MainController implements Initializable {
                     Container container = iterator.next();
                     if (container.getName().equals(selectedItem.getValue())) {
                         iterator.remove();
-                        removeContainerShapes();
                     }
                 }
                 selectedItem.getParent().getChildren().remove(selectedItem);
+                removeContainerAndItemShapes();
             }
         } catch (NullPointerException e) {
             alert.setAlertType(Alert.AlertType.ERROR);
@@ -300,8 +302,26 @@ public class MainController implements Initializable {
         }
     }
 
-    public void removeContainerShapes() {
+    public void drawItemShapes(){
+        for (Item item : itemsArrayList){
+            Rectangle itemBox = new Rectangle();
+            itemBox.setX(item.getLocationX());
+            itemBox.setY(item.getLocationY());
+            itemBox.setWidth(item.getDimensionX());
+            itemBox.setHeight(item.getDimensionY());
+            itemBox.setFill(Color.WHITE);
+            itemBox.setStroke(Color.BLACK);
+            itemBox.setStrokeWidth(1);
+            Text text = new Text(item.getName());
+            text.setX(item.getLocationX() + 5);
+            text.setY(item.getLocationY() + 15);
+            shapesPane.getChildren().addAll(itemBox, text);
+        }
+    }
+
+    public void removeContainerAndItemShapes() {
         shapesPane.getChildren().clear();
         drawContainers();
+        drawItemShapes();
     }
 }
