@@ -102,15 +102,28 @@ public class MainController implements Initializable {
 
     public void addItem() {
         try {
-            TreeItem<String> selectedIteam = treeView.getSelectionModel().getSelectedItem();
-            newPropertyDialog.setTitle("Add Item");
-            newPropertyDialog.setHeaderText("Enter the name of the new item:");
-            newPropertyDialog.showAndWait().ifPresent(response -> {
-                selectedIteam.getChildren().add(new TreeItem<String>(response, new ImageView(fileImage)));
-                itemsArrayList.add(new Item(response));
-                newPropertyDialog.getEditor().clear();
-                drawItemShapes();
-            });
+            TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
+            if (isContainer(selectedItem.getValue())) {
+                newPropertyDialog.setTitle("Add Item");
+                newPropertyDialog.setHeaderText("Enter the name of the new item:");
+                newPropertyDialog.showAndWait().ifPresent(response -> {
+                    selectedItem.getChildren().add(new TreeItem<String>(response, new ImageView(fileImage)));
+                    itemsArrayList.add(new Item(response));
+                    newPropertyDialog.getEditor().clear();
+                    drawItemShapes();
+                });
+            } else {
+                newPropertyDialog.setTitle("Add item");
+                newPropertyDialog.setHeaderText("Enter the name of the new item:");
+                newPropertyDialog.showAndWait().ifPresent(response -> {
+                    selectedItem.getParent().getChildren()
+                            .add(new TreeItem<String>(response, new ImageView(fileImage)));
+                    itemsArrayList.add(new Item(response));
+                    newPropertyDialog.getEditor().clear();
+                    drawItemShapes();
+                    ;
+                });
+            }
         } catch (NullPointerException e) {
             alert.setAlertType(Alert.AlertType.ERROR);
             alert.setContentText("You must select an item from the tree.");
