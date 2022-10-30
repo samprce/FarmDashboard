@@ -1,7 +1,7 @@
 package uab.bogra.farmdashboard;
 
 import java.text.NumberFormat;
-
+import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.scene.shape.Rectangle;
@@ -13,6 +13,7 @@ public class Container {
     private Random random = new Random();
     private int rand = random.nextInt(500);
     private Rectangle box;
+    private ArrayList<Item> children;
 
     public Container(String name) {
         this.name = name;
@@ -22,13 +23,14 @@ public class Container {
         this.dimensionY = 100;
         this.price = 0.00;
         this.box = new Rectangle();
+        this.children = new ArrayList<Item>();
     }
 
-    public Rectangle getBox(){
+    public Rectangle getBox() {
         return this.box;
     }
 
-    public void setBox(Rectangle box){
+    public void setBox(Rectangle box) {
         this.box = box;
     }
 
@@ -79,6 +81,14 @@ public class Container {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public void addChild(Item item) {
+        this.children.add(item);
+    }
+
+    public ArrayList<Item> getChildrenList() {
+        return this.children;
     }
 
 }
