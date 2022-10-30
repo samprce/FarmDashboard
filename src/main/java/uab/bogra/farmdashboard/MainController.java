@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 // Barn[container] > Milk Storage[container]
 // Command Center[container] > Drone[item]
 
+// addItem() ✅ delete() ✅ rename() ✅ changeLocation() ✅ changeDimension() ✅ changePrice() ✅
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -104,47 +105,33 @@ public class MainController implements Initializable {
     public void addItem() {
         try {
             TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
-            if (isContainer(selectedItem.getValue())) {
-                newPropertyDialog.setTitle("Add Item");
-                newPropertyDialog.setHeaderText("Enter the name of the new container:");
-                newPropertyDialog.showAndWait().ifPresent(response -> {
-                    selectedItem.getChildren()
-                            .add(new TreeItem<String>(response, new ImageView(fileImage)));
-                    Item item = new Item(response);
-                    itemsArrayList.add(item);
-                    for (Container container : containerArrayList) {
-                        if (container.getName().equals(selectedItem.getValue())) {
-                            // Test -> comment out when not needed
-                            System.out.println(container.getName() + " has " + container.getChildrenList());
-                            container.addChild(item);
-                            // Test -> comment out when nopt needed
-                            System.out.println(container.getName() + " has " + container.getChildrenList());
-                        }
-                    }
-                    newPropertyDialog.getEditor().clear();
-                    drawItemShapes();
-                });
-            } else {
-                newPropertyDialog.setTitle("Add item");
-                newPropertyDialog.setHeaderText("Enter the name of the new item:");
-                newPropertyDialog.showAndWait().ifPresent(response -> {
+            newPropertyDialog.setTitle("Add Item Container");
+            newPropertyDialog.setHeaderText("Enter the name of the new item container:");
+            newPropertyDialog.showAndWait().ifPresent(response -> {
+                if (selectedItem.getChildren() == null) {
+                    // Adds new tree item to the items
                     selectedItem.getParent().getChildren()
                             .add(new TreeItem<String>(response, new ImageView(fileImage)));
-                    Item item = new Item(response);
-                    itemsArrayList.add(item);
+                    // Get parent tree item of the selected tree item
+                    TreeItem<String> parentToSelectedItem = selectedItem.getParent();
+                    // Find Container object for the parent tree item
                     for (Container container : containerArrayList) {
-                        if (container.getName().equals(selectedItem.getParent().getValue())) {
-                            // Test -> comment out when not needed
-                            System.out.println(container.getName() + " has " + container.getChildrenList());
-                            container.addChild(item);
-                            // Test -> comment out when not needed
-                            System.out.println(container.getName() + " has " + container.getChildrenList());
+                        if (container.getName().equals(parentToSelectedItem.getValue())) {
+                            // Adds an item to the containers ArrayList<Item> that stores all items
+                            container.addChild(new Item(response));
                         }
                     }
-                    newPropertyDialog.getEditor().clear();
-                    drawItemShapes();
-                });
-            }
+                } else {
+                    // Adds new tree item to tree as a child to selected tree item
+                    selectedItem.getChildren().add(new TreeItem<String>(response, new ImageView(fileImage)));
+                    // Find container object that represents the selected tree item
+                    for (Container container : containerArrayList) {
+                        if (container.getName().equals(selectedItem.getValue())) {
+                            container.addChild(new Item(response));
+                        }
+                    }
+                }
+            });
         } catch (NullPointerException e) {
             alert.setAlertType(Alert.AlertType.ERROR);
             alert.setContentText("You must select an item from the tree.");
@@ -155,35 +142,28 @@ public class MainController implements Initializable {
     public void changePrice() {
         try {
             TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
-            if (isContainer(selectedItem.getValue())) {
-                priceDialog.setTitle("Change Price");
-                priceDialog.setHeaderText("Enter the price of the container:");
-                priceDialog.showAndWait().ifPresent(response -> {
+            priceDialog.setTitle("Change Price");
+            priceDialog.setHeaderText("Enter the price of the container:");
+            priceDialog.showAndWait().ifPresent(response -> {
+                if (isContainer(selectedItem.getValue())) {
                     for (Container container : containerArrayList) {
                         if (container.getName().equals(selectedItem.getValue())) {
-                            // Test -> cooment out when not needed
-                            // System.out.println(container.getPriceToString());
                             container.setPrice(Double.parseDouble(response));
-                            // System.out.println(container.getPriceToString());
                         }
                     }
-                });
-                priceDialog.getEditor().clear();
-            } else {
-                priceDialog.setTitle("Change Price");
-                priceDialog.setHeaderText("Enter the price of the item:");
-                priceDialog.showAndWait().ifPresent(response -> {
-                    for (Item item : itemsArrayList) {
-                        if (item.getName().equals(selectedItem.getValue())) {
-                            // Test -> comment out when not needed
-                            // System.out.println(item.getPriceToString());
-                            item.setPrice(Double.parseDouble(response));
-                            // System.out.println(item.getPriceToString());
+                } else {
+                    TreeItem<String> parentToSelectedItem = selectedItem.getParent();
+                    for (Container container : containerArrayList) {
+                        if (container.getName().equals(parentToSelectedItem.getValue())) {
+                            for (Item item : container.getChildrenList()) {
+                                if (item.getName().equals(selectedItem.getValue())) {
+                                    item.setPrice(Double.parseDouble(response));
+                                }
+                            }
                         }
                     }
-                });
-                priceDialog.getEditor().clear();
-            }
+                }
+            });
         } catch (NullPointerException e) {
             alert.setAlertType(Alert.AlertType.ERROR);
             alert.setContentText("You must select an item from the tree.");
@@ -194,36 +174,29 @@ public class MainController implements Initializable {
     public void rename() {
         try {
             TreeItem<String> selectedItem = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
-            if (selectedItem.getValue().equals("Root")) {
-                alert.setAlertType(Alert.AlertType.ERROR);
-                alert.setContentText("You cannot rename the Root directory.");
-                alert.show();
-            } else {
-                renameDialog.setTitle("Rename");
-                renameDialog.setHeaderText("Enter the new name of the property: ");
-                renameDialog.showAndWait().ifPresent(response -> {
-                    if (isContainer(selectedItem.getValue())) {
-                        for (Container container : containerArrayList) {
-                            if (container.getName().equals(selectedItem.getValue())) {
-                                container.setName(response);
-                                // Test -> comment out when not needed
-                                // System.out.println(container.getName());
-                            }
+            newPropertyDialog.setTitle("Add Item Container");
+            newPropertyDialog.setHeaderText("Enter the name of the new item container:");
+            newPropertyDialog.showAndWait().ifPresent(response -> {
+                if (isContainer(selectedItem.getValue()) && !selectedItem.getValue().equals("Root")) {
+                    for (Container container : containerArrayList) {
+                        if (container.getName().equals(selectedItem.getValue())) {
+                            container.setName(response);
+                            selectedItem.setValue(response);
                         }
-                    } else {
-                        for (Item item : itemsArrayList) {
-                            if (item.getName().equals(selectedItem.getValue())) {
-                                item.setName(response);
-                                // Test -> comment out when not needed
-                                // System.out.println(item.getName());
+                    }
+                } else {
+                    TreeItem<String> parentToSelectedItem = selectedItem.getParent();
+                    for (Container container : containerArrayList) {
+                        if (container.getName().equals(parentToSelectedItem.getValue())) {
+                            for (Item item : container.getChildrenList()) {
+                                if (item.getName().equals(selectedItem.getValue())) {
+                                    item.setName(response);
+                                }
                             }
                         }
                     }
-                    selectedItem.setValue(response);
-                    renameDialog.getEditor().clear();
-                    removeContainerAndItemShapes();
-                });
-            }
+                }
+            });
         } catch (NullPointerException e) {
             alert.setAlertType(Alert.AlertType.ERROR);
             alert.setContentText("You must select an item from the tree.");
@@ -234,49 +207,25 @@ public class MainController implements Initializable {
     public void delete() {
         try {
             TreeItem<String> selectedItem = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
-            if (selectedItem.getValue().equals("Root")) {
-                alert.setAlertType(Alert.AlertType.ERROR);
-                alert.setContentText("You cannot delete the Root directory.");
-                alert.show();
-            } else {
-                if (isContainer(selectedItem.getValue())) {
-                    for (Iterator<Container> iterator = containerArrayList.iterator(); iterator.hasNext();) {
-                        Container container = iterator.next();
-                        if (container.getChildrenList().isEmpty()) {
-                            iterator.remove();
-                        } else {
-                            for (Iterator<Item> iterator2 = container.getChildrenList().iterator(); iterator
-                                    .hasNext();) {
-                                Item item = iterator2.next();
-                                // Test -> comment out when not needed
-                                System.out.println(container.getName() + " has " + container.getChildrenList());
-                                container.getChildrenList().remove(item);
-                                // Test -> comment out when not needed
-                                System.out.println(container.getName() + " has " + container.getChildrenList());
-                            }
-                            iterator.remove();
-                        }
+            if (isContainer(selectedItem.getValue()) && !selectedItem.getValue().equals("Null")) {
+                for (Container container : containerArrayList) {
+                    if (container.getName().equals(selectedItem.getValue())) {
+                        container.getChildrenList().clear();
+                        containerArrayList.remove(container);
+                        selectedItem.getParent().getChildren().remove(selectedItem);
                     }
-                    // Test -> comment out when not needed
-                    // System.out.println(containerArrayList.toString());
-                } else {
-                    TreeItem<String> parentOfSelectedItem = selectedItem.getParent();
-                    for (Iterator<Item> iterator = itemsArrayList.iterator(); iterator.hasNext();) {
-                        Item item = iterator.next();
-                        if (item.getName().equals(selectedItem.getValue())) {
-                            for (Container container : containerArrayList) {
-                                if (container.getName().equals(parentOfSelectedItem.getValue())) {
-                                    container.getChildrenList().remove(item);
-                                }
-                            }
-                            iterator.remove();
-                        }
-                    }
-                    // Test -> comment out when not needed
-                    // System.out.println(itemsArrayList.toString());
                 }
-                selectedItem.getParent().getChildren().remove(selectedItem);
-                removeContainerAndItemShapes();
+            } else {
+                TreeItem<String> parentToSelectedItem = selectedItem.getParent();
+                for (Container container : containerArrayList) {
+                    if (container.getName().equals(parentToSelectedItem.getValue())) {
+                        for (Item item : container.getChildrenList()) {
+                            if (item.getName().equals(selectedItem.getValue())) {
+                                container.getChildrenList().remove(item);
+                            }
+                        }
+                    }
+                }
             }
         } catch (NullPointerException e) {
             alert.setAlertType(Alert.AlertType.ERROR);
@@ -286,7 +235,7 @@ public class MainController implements Initializable {
     }
 
     public void changeLocation() {
-        String selectedItemValue = treeView.getSelectionModel().getSelectedItem().getValue();
+        TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
 
         Dialog<Pair<Integer, Integer>> dialog = new Dialog<>();
         dialog.setTitle("Change Location");
@@ -320,45 +269,31 @@ public class MainController implements Initializable {
         Optional<Pair<Integer, Integer>> result = dialog.showAndWait();
 
         result.ifPresent(xAndY -> {
-            if (isContainer(selectedItemValue)) {
+            if (isContainer(selectedItem.getValue())) {
                 for (Container container : containerArrayList) {
-                    if (container.getName().equals(selectedItemValue)) {
-                        // Test -> comment out when not needed
-                        // System.out.println(container.getName());
-                        // System.out.println(container.getLocationX());
-                        // System.out.println(container.getLocationY());
+                    if (container.getName().equals(selectedItem.getValue())) {
                         container.setLocationX(xAndY.getKey());
                         container.setLocationY(xAndY.getValue());
-                        // Test -> comment out when not needed
-                        // System.out.println(container.getName());
-                        // System.out.println(container.getLocationX());
-                        // System.out.println(container.getLocationY());
                     }
                 }
             } else {
-                for (Item item : itemsArrayList) {
-                    if (item.getName().equals(selectedItemValue)) {
-                        // Test -> comment out when not needed
-                        // System.out.println(item.getName());
-                        // System.out.println(item.getLocationX());
-                        // System.out.println(item.getLocationY());
-                        item.setLocationX(xAndY.getKey());
-                        item.setLocationY(xAndY.getValue());
-                        // Test -> comment out when not needed
-                        // System.out.println(item.getName());
-                        // System.out.println(item.getLocationX());
-                        // System.out.println(item.getLocationY());
+                TreeItem<String> parentToSelectedItem = selectedItem.getParent();
+                for (Container container : containerArrayList) {
+                    if (container.getName().equals(parentToSelectedItem.getValue())) {
+                        for (Item item : container.getChildrenList()) {
+                            if (item.getName().equals(selectedItem.getValue())) {
+                                item.setLocationX(xAndY.getKey());
+                                item.setLocationY(xAndY.getValue());
+                            }
+                        }
                     }
                 }
             }
-            shapesPane.getChildren().clear();
-            drawContainers();
-            drawItemShapes();
         });
     }
 
     public void changeDimension() {
-        String selectedItemValue = treeView.getSelectionModel().getSelectedItem().getValue();
+        TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
 
         Dialog<Pair<Integer, Integer>> dialog = new Dialog<>();
         dialog.setTitle("Change Dimension");
@@ -392,40 +327,26 @@ public class MainController implements Initializable {
         Optional<Pair<Integer, Integer>> result = dialog.showAndWait();
 
         result.ifPresent(xAndY -> {
-            if (isContainer(selectedItemValue)) {
+            if (isContainer(selectedItem.getValue())) {
                 for (Container container : containerArrayList) {
-                    if (container.getName().equals(selectedItemValue)) {
-                        // Test -> comment out when not needed
-                        // System.out.println(container.getName());
-                        // System.out.println(container.getDimensionX());
-                        // System.out.println(container.getDimensionY());
+                    if (container.getName().equals(selectedItem.getValue())) {
                         container.setDimensionX(xAndY.getKey());
                         container.setDimensionY(xAndY.getValue());
-                        // Test -> comment out when not needed
-                        // System.out.println(container.getName());
-                        // System.out.println(container.getDimensionX());
-                        // System.out.println(container.getDimensionY());
                     }
                 }
             } else {
-                for (Item item : itemsArrayList) {
-                    if (item.getName().equals(selectedItemValue)) {
-                        // Test -> comment out when not needed
-                        // System.out.println(item.getName());
-                        // System.out.println(item.getDimensionX());
-                        // System.out.println(item.getDimensionY());
-                        item.setDimensionX(xAndY.getKey());
-                        item.setDimensionY(xAndY.getValue());
-                        // Test -> comment out when not needed
-                        // System.out.println(item.getName());
-                        // System.out.println(item.getDimensionX());
-                        // System.out.println(item.getDimensionY());
+                TreeItem<String> parentToSelectedItem = selectedItem.getParent();
+                for (Container container : containerArrayList) {
+                    if (container.getName().equals(parentToSelectedItem.getValue())) {
+                        for (Item item : container.getChildrenList()) {
+                            if (item.getName().equals(selectedItem.getValue())) {
+                                item.setDimensionX(xAndY.getKey());
+                                item.setDimensionY(xAndY.getValue());
+                            }
+                        }
                     }
                 }
             }
-            shapesPane.getChildren().clear();
-            drawContainers();
-            drawItemShapes();
         });
     }
 
