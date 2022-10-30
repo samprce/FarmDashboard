@@ -108,8 +108,19 @@ public class MainController implements Initializable {
                 newPropertyDialog.setTitle("Add Item");
                 newPropertyDialog.setHeaderText("Enter the name of the new container:");
                 newPropertyDialog.showAndWait().ifPresent(response -> {
-                    selectedItem.getChildren().add(new TreeItem<String>(response, new ImageView(fileImage)));
-                    itemsArrayList.add(new Item(response));
+                    selectedItem.getChildren()
+                            .add(new TreeItem<String>(response, new ImageView(fileImage)));
+                    Item item = new Item(response);
+                    itemsArrayList.add(item);
+                    for (Container container : containerArrayList) {
+                        if (container.getName().equals(selectedItem.getValue())) {
+                            // Test -> comment out when not needed
+                            System.out.println(container.getName() + " has " + container.getChildrenList());
+                            container.addChild(item);
+                            // Test -> comment out when nopt needed
+                            System.out.println(container.getName() + " has " + container.getChildrenList());
+                        }
+                    }
                     newPropertyDialog.getEditor().clear();
                     drawItemShapes();
                 });
@@ -119,7 +130,17 @@ public class MainController implements Initializable {
                 newPropertyDialog.showAndWait().ifPresent(response -> {
                     selectedItem.getParent().getChildren()
                             .add(new TreeItem<String>(response, new ImageView(fileImage)));
-                    itemsArrayList.add(new Item(response));
+                    Item item = new Item(response);
+                    itemsArrayList.add(item);
+                    for (Container container : containerArrayList) {
+                        if (container.getName().equals(selectedItem.getParent().getValue())) {
+                            // Test -> comment out when not needed
+                            System.out.println(container.getName() + " has " + container.getChildrenList());
+                            container.addChild(item);
+                            // Test -> comment out when not needed
+                            System.out.println(container.getName() + " has " + container.getChildrenList());
+                        }
+                    }
                     newPropertyDialog.getEditor().clear();
                     drawItemShapes();
                 });
@@ -140,7 +161,7 @@ public class MainController implements Initializable {
                 priceDialog.showAndWait().ifPresent(response -> {
                     for (Container container : containerArrayList) {
                         if (container.getName().equals(selectedItem.getValue())) {
-                            // Test -> cooment out when not neede
+                            // Test -> cooment out when not needed
                             // System.out.println(container.getPriceToString());
                             container.setPrice(Double.parseDouble(response));
                             // System.out.println(container.getPriceToString());
@@ -221,16 +242,33 @@ public class MainController implements Initializable {
                 if (isContainer(selectedItem.getValue())) {
                     for (Iterator<Container> iterator = containerArrayList.iterator(); iterator.hasNext();) {
                         Container container = iterator.next();
-                        if (container.getName().equals(selectedItem.getValue())) {
+                        if (container.getChildrenList().isEmpty()) {
+                            iterator.remove();
+                        } else {
+                            for (Iterator<Item> iterator2 = container.getChildrenList().iterator(); iterator
+                                    .hasNext();) {
+                                Item item = iterator2.next();
+                                // Test -> comment out when not needed
+                                System.out.println(container.getName() + " has " + container.getChildrenList());
+                                container.getChildrenList().remove(item);
+                                // Test -> comment out when not needed
+                                System.out.println(container.getName() + " has " + container.getChildrenList());
+                            }
                             iterator.remove();
                         }
                     }
                     // Test -> comment out when not needed
                     // System.out.println(containerArrayList.toString());
                 } else {
+                    TreeItem<String> parentOfSelectedItem = selectedItem.getParent();
                     for (Iterator<Item> iterator = itemsArrayList.iterator(); iterator.hasNext();) {
                         Item item = iterator.next();
                         if (item.getName().equals(selectedItem.getValue())) {
+                            for (Container container : containerArrayList) {
+                                if (container.getName().equals(parentOfSelectedItem.getValue())) {
+                                    container.getChildrenList().remove(item);
+                                }
+                            }
                             iterator.remove();
                         }
                     }
