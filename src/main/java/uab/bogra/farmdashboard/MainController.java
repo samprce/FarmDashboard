@@ -263,6 +263,7 @@ public class MainController implements Initializable {
             }
             shapesPane.getChildren().clear();
             drawContainers();
+            drawItemShapes();
         });
     }
 
@@ -334,6 +335,7 @@ public class MainController implements Initializable {
             }
             shapesPane.getChildren().clear();
             drawContainers();
+            drawItemShapes();
         });
     }
 
