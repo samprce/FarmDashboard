@@ -48,6 +48,7 @@ public class MainController implements Initializable {
     TextInputDialog newPropertyDialog = new TextInputDialog();
     TextInputDialog renameDialog = new TextInputDialog();
     TextInputDialog newItemDialog = new TextInputDialog();
+    TextInputDialog priceDialog = new TextInputDialog();
 
     Image folderImage = new Image(getClass().getResourceAsStream("/folder.png"));
     Image fileImage = new Image(getClass().getResourceAsStream("/file.png"));
@@ -105,7 +106,7 @@ public class MainController implements Initializable {
             TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
             if (isContainer(selectedItem.getValue())) {
                 newPropertyDialog.setTitle("Add Item");
-                newPropertyDialog.setHeaderText("Enter the name of the new item:");
+                newPropertyDialog.setHeaderText("Enter the name of the new container:");
                 newPropertyDialog.showAndWait().ifPresent(response -> {
                     selectedItem.getChildren().add(new TreeItem<String>(response, new ImageView(fileImage)));
                     itemsArrayList.add(new Item(response));
@@ -121,8 +122,46 @@ public class MainController implements Initializable {
                     itemsArrayList.add(new Item(response));
                     newPropertyDialog.getEditor().clear();
                     drawItemShapes();
-                    ;
                 });
+            }
+        } catch (NullPointerException e) {
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.setContentText("You must select an item from the tree.");
+            alert.show();
+        }
+    }
+
+    public void changePrice() {
+        try {
+            TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
+            if (isContainer(selectedItem.getValue())) {
+                priceDialog.setTitle("Change Price");
+                priceDialog.setHeaderText("Enter the price of the container:");
+                priceDialog.showAndWait().ifPresent(response -> {
+                    for (Container container : containerArrayList) {
+                        if (container.getName().equals(selectedItem.getValue())) {
+                            // Test -> cooment out when not neede
+                            // System.out.println(container.getPriceToString());
+                            container.setPrice(Double.parseDouble(response));
+                            // System.out.println(container.getPriceToString());
+                        }
+                    }
+                });
+                priceDialog.getEditor().clear();
+            } else {
+                priceDialog.setTitle("Change Price");
+                priceDialog.setHeaderText("Enter the price of the item:");
+                priceDialog.showAndWait().ifPresent(response -> {
+                    for (Item item : itemsArrayList) {
+                        if (item.getName().equals(selectedItem.getValue())) {
+                            // Test -> comment out when not needed
+                            // System.out.println(item.getPriceToString());
+                            item.setPrice(Double.parseDouble(response));
+                            // System.out.println(item.getPriceToString());
+                        }
+                    }
+                });
+                priceDialog.getEditor().clear();
             }
         } catch (NullPointerException e) {
             alert.setAlertType(Alert.AlertType.ERROR);

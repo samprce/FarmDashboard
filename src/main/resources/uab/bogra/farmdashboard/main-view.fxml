@@ -22,9 +22,9 @@
                      </font></Label>
                         <Button layoutX="121.0" layoutY="93.0" mnemonicParsing="false" onAction="#rename" prefHeight="26.0" prefWidth="253.0" text="Rename" />
                         <Button layoutX="121.0" layoutY="119.0" mnemonicParsing="false" onAction="#changeLocation" prefHeight="26.0" prefWidth="253.0" text="Change Location" />
-                        <Button layoutX="121.0" layoutY="145.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="253.0" text="Change Price" />
+                        <Button layoutX="121.0" layoutY="145.0" mnemonicParsing="false" onAction="#changePrice" prefHeight="26.0" prefWidth="253.0" text="Change Price" />
                         <Button layoutX="121.0" layoutY="171.0" mnemonicParsing="false" onAction="#changeDimension" prefHeight="26.0" prefWidth="253.0" text="Change Dimensions" />
-                        <Button layoutX="121.0" layoutY="197.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="253.0" text="Add Item">
+                        <Button layoutX="121.0" layoutY="197.0" mnemonicParsing="false" onAction="#addItem" prefHeight="26.0" prefWidth="253.0" text="Add Item">
                      <rotationAxis>
                         <Point3D x="-3.0" z="1.0" />
                      </rotationAxis>
@@ -40,7 +40,7 @@
                      </font></Label>
                         <Button layoutX="122.0" layoutY="67.0" mnemonicParsing="false" onAction="#rename" prefHeight="26.0" prefWidth="253.0" text="Rename" />
                         <Button layoutX="122.0" layoutY="93.0" mnemonicParsing="false" onAction="#changeLocation" prefHeight="26.0" prefWidth="253.0" text="Change Location" />
-                        <Button layoutX="122.0" layoutY="119.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="253.0" text="Change Price" />
+                        <Button layoutX="122.0" layoutY="119.0" mnemonicParsing="false" onAction="#changePrice" prefHeight="26.0" prefWidth="253.0" text="Change Price" />
                         <Button layoutX="122.0" layoutY="145.0" mnemonicParsing="false" onAction="#changeDimension" prefHeight="26.0" prefWidth="253.0" text="Change Dimensions" />
                         <Button layoutX="122.0" layoutY="171.0" mnemonicParsing="false" onAction="#addItem" prefHeight="26.0" prefWidth="253.0" text="Add Item" />
                         <Button fx:id="containerAddButton" layoutX="122.0" layoutY="197.0" mnemonicParsing="false" onAction="#addContainer" prefHeight="26.0" prefWidth="253.0" text="Add Item Container" />
