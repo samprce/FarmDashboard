@@ -60,6 +60,8 @@ public class MainController implements Initializable {
         itemCommandsPane.setDisable(true);
 
         TreeItem<String> rootNode = new TreeItem<>("Root", new ImageView(folderImage));
+        Container rootContainer = new Container("Root");
+        containerArrayList.add(rootContainer);
         treeView.setRoot(rootNode);
         rootNode.setExpanded(true);
 
@@ -68,21 +70,10 @@ public class MainController implements Initializable {
             public void handle(MouseEvent event) {
                 try {
                     TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
-                    for (Container container : containerArrayList) {
-                        if (container.getName().equals(selectedItem.getValue())) {
-                            containerCommandsPane.setVisible(true);
-                            containerCommandsPane.setDisable(false);
-                            itemCommandsPane.setVisible(false);
-                            itemCommandsPane.setDisable(true);
-                        }
-                    }
-                    for (Item item : itemsArrayList) {
-                        if (item.getName().equals(selectedItem.getValue())) {
-                            itemCommandsPane.setVisible(true);
-                            itemCommandsPane.setDisable(false);
-                            containerCommandsPane.setVisible(false);
-                            containerCommandsPane.setDisable(true);
-                        }
+                    if (isContainer(selectedItem.getValue())) {
+                        showContainerControls(containerCommandsPane, itemCommandsPane);
+                    } else if (!isContainer(selectedItem.getValue())) {
+                        showItemControls(itemCommandsPane, containerCommandsPane);
                     }
                 } catch (NullPointerException e) {
                     e.printStackTrace();
@@ -138,9 +129,21 @@ public class MainController implements Initializable {
                 renameDialog.setTitle("Rename");
                 renameDialog.setHeaderText("Enter the new name of the property: ");
                 renameDialog.showAndWait().ifPresent(response -> {
-                    for (Container c : containerArrayList) {
-                        if (c.getName().equals(selectedItem.getValue())) {
-                            c.setName(response);
+                    if (isContainer(selectedItem.getValue())) {
+                        for (Container container : containerArrayList) {
+                            if (container.getName().equals(selectedItem.getValue())) {
+                                container.setName(response);
+                                // Test -> comment out when not needed
+                                // System.out.println(container.getName());
+                            }
+                        }
+                    } else {
+                        for (Item item : itemsArrayList) {
+                            if (item.getName().equals(selectedItem.getValue())) {
+                                item.setName(response);
+                                // Test -> comment out when not needed
+                                // System.out.println(item.getName());
+                            }
                         }
                     }
                     selectedItem.setValue(response);
@@ -163,11 +166,24 @@ public class MainController implements Initializable {
                 alert.setContentText("You cannot delete the Root directory.");
                 alert.show();
             } else {
-                for (Iterator<Container> iterator = containerArrayList.iterator(); iterator.hasNext();) {
-                    Container container = iterator.next();
-                    if (container.getName().equals(selectedItem.getValue())) {
-                        iterator.remove();
+                if (isContainer(selectedItem.getValue())) {
+                    for (Iterator<Container> iterator = containerArrayList.iterator(); iterator.hasNext();) {
+                        Container container = iterator.next();
+                        if (container.getName().equals(selectedItem.getValue())) {
+                            iterator.remove();
+                        }
                     }
+                    // Test -> comment out when not needed
+                    // System.out.println(containerArrayList.toString());
+                } else {
+                    for (Iterator<Item> iterator = itemsArrayList.iterator(); iterator.hasNext();) {
+                        Item item = iterator.next();
+                        if (item.getName().equals(selectedItem.getValue())) {
+                            iterator.remove();
+                        }
+                    }
+                    // Test -> comment out when not needed
+                    // System.out.println(itemsArrayList.toString());
                 }
                 selectedItem.getParent().getChildren().remove(selectedItem);
                 removeContainerAndItemShapes();
@@ -214,16 +230,35 @@ public class MainController implements Initializable {
         Optional<Pair<Integer, Integer>> result = dialog.showAndWait();
 
         result.ifPresent(xAndY -> {
-            for (Container container : containerArrayList) {
-                if (container.getName().equals(selectedItemValue)) {
-                    // System.out.println(container.getName());
-                    // System.out.println(container.getLocationX());
-                    // System.out.println(container.getLocationY());
-                    container.setLocationX(xAndY.getKey());
-                    container.setLocationY(xAndY.getValue());
-                    // System.out.println(container.getName());
-                    // System.out.println(container.getLocationX());
-                    // System.out.println(container.getLocationY());
+            if (isContainer(selectedItemValue)) {
+                for (Container container : containerArrayList) {
+                    if (container.getName().equals(selectedItemValue)) {
+                        // Test -> comment out when not needed
+                        // System.out.println(container.getName());
+                        // System.out.println(container.getLocationX());
+                        // System.out.println(container.getLocationY());
+                        container.setLocationX(xAndY.getKey());
+                        container.setLocationY(xAndY.getValue());
+                        // Test -> comment out when not needed
+                        // System.out.println(container.getName());
+                        // System.out.println(container.getLocationX());
+                        // System.out.println(container.getLocationY());
+                    }
+                }
+            } else {
+                for (Item item : itemsArrayList) {
+                    if (item.getName().equals(selectedItemValue)) {
+                        // Test -> comment out when not needed
+                        // System.out.println(item.getName());
+                        // System.out.println(item.getLocationX());
+                        // System.out.println(item.getLocationY());
+                        item.setLocationX(xAndY.getKey());
+                        item.setLocationY(xAndY.getValue());
+                        // Test -> comment out when not needed
+                        // System.out.println(item.getName());
+                        // System.out.println(item.getLocationX());
+                        // System.out.println(item.getLocationY());
+                    }
                 }
             }
             shapesPane.getChildren().clear();
@@ -266,16 +301,35 @@ public class MainController implements Initializable {
         Optional<Pair<Integer, Integer>> result = dialog.showAndWait();
 
         result.ifPresent(xAndY -> {
-            for (Container container : containerArrayList) {
-                if (container.getName().equals(selectedItemValue)) {
-                    // System.out.println(container.getName());
-                    // System.out.println(container.getDimensionX());
-                    // System.out.println(container.getDimensionY());
-                    container.setDimensionX(xAndY.getKey());
-                    container.setDimensionY(xAndY.getValue());
-                    // System.out.println(container.getName());
-                    // System.out.println(container.getDimensionX());
-                    // System.out.println(container.getDimensionY());
+            if (isContainer(selectedItemValue)) {
+                for (Container container : containerArrayList) {
+                    if (container.getName().equals(selectedItemValue)) {
+                        // Test -> comment out when not needed
+                        // System.out.println(container.getName());
+                        // System.out.println(container.getDimensionX());
+                        // System.out.println(container.getDimensionY());
+                        container.setDimensionX(xAndY.getKey());
+                        container.setDimensionY(xAndY.getValue());
+                        // Test -> comment out when not needed
+                        // System.out.println(container.getName());
+                        // System.out.println(container.getDimensionX());
+                        // System.out.println(container.getDimensionY());
+                    }
+                }
+            } else {
+                for (Item item : itemsArrayList) {
+                    if (item.getName().equals(selectedItemValue)) {
+                        // Test -> comment out when not needed
+                        // System.out.println(item.getName());
+                        // System.out.println(item.getDimensionX());
+                        // System.out.println(item.getDimensionY());
+                        item.setDimensionX(xAndY.getKey());
+                        item.setDimensionY(xAndY.getValue());
+                        // Test -> comment out when not needed
+                        // System.out.println(item.getName());
+                        // System.out.println(item.getDimensionX());
+                        // System.out.println(item.getDimensionY());
+                    }
                 }
             }
             shapesPane.getChildren().clear();
@@ -302,8 +356,8 @@ public class MainController implements Initializable {
         }
     }
 
-    public void drawItemShapes(){
-        for (Item item : itemsArrayList){
+    public void drawItemShapes() {
+        for (Item item : itemsArrayList) {
             Rectangle itemBox = new Rectangle();
             itemBox.setX(item.getLocationX());
             itemBox.setY(item.getLocationY());
@@ -323,5 +377,30 @@ public class MainController implements Initializable {
         shapesPane.getChildren().clear();
         drawContainers();
         drawItemShapes();
+    }
+
+    public boolean isContainer(String value) {
+        boolean isContainer = false;
+
+        for (Container container : containerArrayList) {
+            if (container.getName().equals(value)) {
+                isContainer = true;
+            }
+        }
+        return isContainer;
+    }
+
+    public void showItemControls(AnchorPane items, AnchorPane containers) {
+        items.setVisible(true);
+        items.setDisable(false);
+        containers.setVisible(false);
+        containers.setDisable(true);
+    }
+
+    public void showContainerControls(AnchorPane containers, AnchorPane items) {
+        containers.setVisible(true);
+        containers.setDisable(false);
+        items.setVisible(false);
+        items.setDisable(true);
     }
 }

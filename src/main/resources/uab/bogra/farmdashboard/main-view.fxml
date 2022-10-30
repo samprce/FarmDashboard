@@ -14,21 +14,22 @@
     <children>
         <AnchorPane fx:id="hierarchyPane" prefHeight="900.0" prefWidth="460.0">
             <children>
-                <AnchorPane fx:id="itemCommandsPane" layoutX="10.0" layoutY="326.0" prefHeight="285.0" prefWidth="512.0" visible="false">
+                <AnchorPane fx:id="itemCommandsPane" focusTraversable="true" layoutX="10.0" layoutY="326.0" prefHeight="285.0" prefWidth="512.0" visible="false">
                     <children>
                         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="121.0" layoutY="63.0" prefHeight="30.0" prefWidth="253.0" style="-fx-background-color: white; -fx-border-color: black;" text="ITEM COMMANDS" textAlignment="CENTER">
                      <font>
                         <Font size="15.0" />
                      </font></Label>
                         <Button layoutX="121.0" layoutY="93.0" mnemonicParsing="false" onAction="#rename" prefHeight="26.0" prefWidth="253.0" text="Rename" />
-                        <Button layoutX="121.0" layoutY="119.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="253.0" text="Change Location" />
+                        <Button layoutX="121.0" layoutY="119.0" mnemonicParsing="false" onAction="#changeLocation" prefHeight="26.0" prefWidth="253.0" text="Change Location" />
                         <Button layoutX="121.0" layoutY="145.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="253.0" text="Change Price" />
-                        <Button layoutX="121.0" layoutY="171.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="253.0" text="Change Dimensions" />
-                        <Button layoutX="121.0" layoutY="197.0" mnemonicParsing="false" onAction="#delete" prefHeight="26.0" prefWidth="253.0" text="Add Item">
+                        <Button layoutX="121.0" layoutY="171.0" mnemonicParsing="false" onAction="#changeDimension" prefHeight="26.0" prefWidth="253.0" text="Change Dimensions" />
+                        <Button layoutX="121.0" layoutY="197.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="253.0" text="Add Item">
                      <rotationAxis>
                         <Point3D x="-3.0" z="1.0" />
                      </rotationAxis>
                   </Button>
+                  <Button layoutX="121.0" layoutY="223.0" mnemonicParsing="false" onAction="#delete" prefHeight="25.0" prefWidth="253.0" text="Delete" />
                     </children>
                 </AnchorPane>
                 <AnchorPane fx:id="containerCommandsPane" layoutX="10.0" layoutY="326.0" prefHeight="285.0" prefWidth="512.0">
