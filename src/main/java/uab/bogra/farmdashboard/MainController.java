@@ -127,6 +127,7 @@ public class MainController implements Initializable {
                             container.addChild(new Item(response));
                         }
                     }
+                    drawItemShapes();
                 } else {
                     // Adds new tree item to tree as a child to selected tree item
                     selectedItem.getChildren().add(new TreeItem<String>(response, new ImageView(fileImage)));
@@ -136,6 +137,7 @@ public class MainController implements Initializable {
                             container.addChild(new Item(response));
                         }
                     }
+                    drawItemShapes();
                 }
             });
         } catch (NullPointerException e) {
@@ -155,6 +157,7 @@ public class MainController implements Initializable {
                     for (Container container : containerArrayList) {
                         if (container.getName().equals(selectedItem.getValue())) {
                             container.setPrice(Double.parseDouble(response));
+                            removeContainerAndItemShapes();
                         }
                     }
                 } else {
@@ -164,6 +167,7 @@ public class MainController implements Initializable {
                             for (Item item : container.getChildrenList()) {
                                 if (item.getName().equals(selectedItem.getValue())) {
                                     item.setPrice(Double.parseDouble(response));
+                                    removeContainerAndItemShapes();
                                 }
                             }
                         }
@@ -188,6 +192,7 @@ public class MainController implements Initializable {
                         if (container.getName().equals(selectedItem.getValue())) {
                             container.setName(response);
                             selectedItem.setValue(response);
+                            removeContainerAndItemShapes();
                         }
                     }
                 } else {
@@ -197,6 +202,7 @@ public class MainController implements Initializable {
                             for (Item item : container.getChildrenList()) {
                                 if (item.getName().equals(selectedItem.getValue())) {
                                     item.setName(response);
+                                    removeContainerAndItemShapes();
                                 }
                             }
                         }
@@ -219,6 +225,7 @@ public class MainController implements Initializable {
                         container.getChildrenList().clear();
                         containerArrayList.remove(container);
                         selectedItem.getParent().getChildren().remove(selectedItem);
+                        removeContainerAndItemShapes();
                     }
                 }
             } else {
@@ -228,6 +235,8 @@ public class MainController implements Initializable {
                         for (Item item : container.getChildrenList()) {
                             if (item.getName().equals(selectedItem.getValue())) {
                                 container.getChildrenList().remove(item);
+                                selectedItem.getParent().getChildren().remove(selectedItem);
+                                removeContainerAndItemShapes();
                             }
                         }
                     }
@@ -282,6 +291,7 @@ public class MainController implements Initializable {
                         container.setLocationY(xAndY.getValue());
                     }
                 }
+                removeContainerAndItemShapes();
             } else {
                 TreeItem<String> parentToSelectedItem = selectedItem.getParent();
                 for (Container container : containerArrayList) {
@@ -294,6 +304,7 @@ public class MainController implements Initializable {
                         }
                     }
                 }
+                removeContainerAndItemShapes();
             }
         });
     }
@@ -340,6 +351,7 @@ public class MainController implements Initializable {
                         container.setDimensionY(xAndY.getValue());
                     }
                 }
+                removeContainerAndItemShapes();
             } else {
                 TreeItem<String> parentToSelectedItem = selectedItem.getParent();
                 for (Container container : containerArrayList) {
@@ -352,6 +364,7 @@ public class MainController implements Initializable {
                         }
                     }
                 }
+                removeContainerAndItemShapes();
             }
         });
     }
@@ -376,19 +389,21 @@ public class MainController implements Initializable {
     }
 
     public void drawItemShapes() {
-        for (Item item : itemsArrayList) {
-            Rectangle itemBox = new Rectangle();
-            itemBox.setX(item.getLocationX());
-            itemBox.setY(item.getLocationY());
-            itemBox.setWidth(item.getDimensionX());
-            itemBox.setHeight(item.getDimensionY());
-            itemBox.setFill(Color.WHITE);
-            itemBox.setStroke(Color.BLACK);
-            itemBox.setStrokeWidth(1);
-            Text text = new Text(item.getName());
-            text.setX(item.getLocationX() + 5);
-            text.setY(item.getLocationY() + 15);
-            shapesPane.getChildren().addAll(itemBox, text);
+        for (Container container : containerArrayList) {
+            for (Item item : container.getChildrenList()){
+                Rectangle itemBox = new Rectangle();
+                itemBox.setX(item.getLocationX());
+                itemBox.setY(item.getLocationY());
+                itemBox.setWidth(item.getDimensionX());
+                itemBox.setHeight(item.getDimensionY());
+                itemBox.setFill(Color.WHITE);
+                itemBox.setStroke(Color.BLACK);
+                itemBox.setStrokeWidth(1);
+                Text text = new Text(item.getName());
+                text.setX(item.getLocationX() + 5);
+                text.setY(item.getLocationY() + 15);
+                shapesPane.getChildren().addAll(itemBox, text);
+            }
         }
     }
 
@@ -396,6 +411,7 @@ public class MainController implements Initializable {
         shapesPane.getChildren().clear();
         drawContainers();
         drawItemShapes();
+        shapesPane.getChildren().add(Square);
     }
 
     public boolean isContainer(String value) {
