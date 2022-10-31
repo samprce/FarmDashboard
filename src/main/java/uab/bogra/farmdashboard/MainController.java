@@ -114,7 +114,7 @@ public class MainController implements Initializable {
             newPropertyDialog.setTitle("Add Item Container");
             newPropertyDialog.setHeaderText("Enter the name of the new item container:");
             newPropertyDialog.showAndWait().ifPresent(response -> {
-                if (selectedItem.getChildren() == null) {
+                if (!isContainer(selectedItem.getValue()) && selectedItem.isLeaf()) {
                     // Adds new tree item to the items
                     selectedItem.getParent().getChildren()
                             .add(new TreeItem<String>(response, new ImageView(fileImage)));
@@ -475,7 +475,7 @@ public class MainController implements Initializable {
         Square.coverFarm();
     }
 
-    public void goHome(){
+    public void goHome() {
         Square.toFront();
         Square.goHome();
     }
