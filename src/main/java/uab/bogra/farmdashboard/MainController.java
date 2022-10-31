@@ -46,6 +46,12 @@ public class MainController implements Initializable {
     @FXML
     Pane shapesPane;
 
+    @FXML
+    Rectangle commandShape;
+
+    @FXML
+    Text commandText;
+
     DroneAnimation Square = new DroneAnimation();
 
     ArrayList<Container> containerArrayList = new ArrayList<>();
@@ -414,6 +420,8 @@ public class MainController implements Initializable {
         shapesPane.getChildren().clear();
         drawContainers();
         drawItemShapes();
+        shapesPane.getChildren().add(commandShape);
+        shapesPane.getChildren().add(commandText);
         shapesPane.getChildren().add(Square);
     }
 

@@ -70,8 +70,8 @@
                 <Separator layoutX="-2.0" layoutY="-3.0" orientation="VERTICAL" prefHeight="902.0" prefWidth="19.0" />
                 <Pane id="shapesPane" fx:id="shapesPane" layoutX="44.0" layoutY="42.0" prefHeight="812.0" prefWidth="965.0">
                <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="132.0" stroke="BLACK" strokeType="INSIDE" width="181.0" />
-                  <Text layoutX="62.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Command Center">
+                  <Rectangle fx:id="commandShape" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="132.0" stroke="BLACK" strokeType="INSIDE" width="181.0" />
+                  <Text fx:id="commandText" layoutX="62.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Command Center">
                      <font>
                         <Font size="15.0" />
                      </font>
