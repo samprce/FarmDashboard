@@ -56,8 +56,8 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Button layoutX="191.0" layoutY="95.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="157.0" text="Scan Farm" />
-                  <Button layoutX="191.0" layoutY="56.0" mnemonicParsing="false" text="Visit Item / Item Container" />
+                  <Button layoutX="101.0" layoutY="56.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="157.0" onAction="#scanFarm" text="Scan Farm" />
+                  <Button layoutX="261.0" layoutY="56.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="157.0" onAction="#visitItem" text="Visit Item / Item Container" />
                </children>
             </AnchorPane>
             </children>
