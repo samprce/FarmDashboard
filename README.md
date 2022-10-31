@@ -1,6 +1,9 @@
 # farm-dashboard
 Readme
+github located at:
+https://github.com/samprce/app-farm-dashboard
 
+In app-farm-dashboard/src/main/java/uab/bogra/farmdashboard/
 Run MainController.java
 
 Item/Item Containers:
