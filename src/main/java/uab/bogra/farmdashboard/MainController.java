@@ -470,4 +470,9 @@ public class MainController implements Initializable {
         Square.toFront();
         Square.coverFarm();
     }
+
+    public void goHome(){
+        Square.toFront();
+        Square.goHome();
+    }
 }
