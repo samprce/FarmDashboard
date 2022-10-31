@@ -1,5 +1,7 @@
 package uab.bogra.farmdashboard;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 
 // Root
@@ -44,6 +46,8 @@ public class MainController implements Initializable {
     @FXML
     Pane shapesPane;
 
+    DroneAnimation Square = new DroneAnimation();
+
     ArrayList<Container> containerArrayList = new ArrayList<>();
     ArrayList<Item> itemsArrayList = new ArrayList<>();
     TextInputDialog newPropertyDialog = new TextInputDialog();
@@ -66,6 +70,8 @@ public class MainController implements Initializable {
         containerArrayList.add(rootContainer);
         treeView.setRoot(rootNode);
         rootNode.setExpanded(true);
+
+        shapesPane.getChildren().addAll(Square);
 
         treeView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -415,5 +421,37 @@ public class MainController implements Initializable {
         containers.setDisable(false);
         items.setVisible(false);
         items.setDisable(true);
+    }
+
+    public ObservableList<Double> getdLocs(){
+        String selectedItemValue = treeView.getSelectionModel().getSelectedItem().getValue();
+ 
+        ObservableList<Double> wantedvals = FXCollections. observableArrayList();
+        
+        if (isContainer(selectedItemValue)) {
+            for (Container container : containerArrayList) {
+                if (container.getName().equals(selectedItemValue)) {
+                    wantedvals.addAll(Double.valueOf(container.getLocationX()),Double.valueOf(container.getLocationY()));
+                }
+            }
+        } else { 
+            for (Item item : itemsArrayList) {
+                if (item.getName().equals(selectedItemValue)) {
+                    wantedvals.addAll(Double.valueOf(item.getLocationX()),Double.valueOf(item.getLocationY()));
+                }
+            }
+        }
+        return wantedvals;
+    }
+
+    public void visitItem(){
+        Square.toFront();
+        ObservableList<Double> newDLoc = getdLocs();
+        Square.moveTrDir(newDLoc.get(0),newDLoc.get(1));
+    }
+
+    public void scanFarm(){
+        Square.toFront();
+        Square.coverFarm();
     }
 }
