@@ -443,26 +443,30 @@ public class MainController implements Initializable {
     }
 
     public ObservableList<Double> getdLocs() {
-        String selectedItemValue = treeView.getSelectionModel().getSelectedItem().getValue();
+ 
+ObservableList<Double> wantedvals = FXCollections. observableArrayList();
+TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
 
-        ObservableList<Double> wantedvals = FXCollections.observableArrayList();
-
-        if (isContainer(selectedItemValue)) {
-            for (Container container : containerArrayList) {
-                if (container.getName().equals(selectedItemValue)) {
-                    wantedvals.addAll(Double.valueOf(container.getLocationX()),
-                            Double.valueOf(container.getLocationY()));
-                }
-            }
-        } else {
-            for (Item item : itemsArrayList) {
-                if (item.getName().equals(selectedItemValue)) {
-                    wantedvals.addAll(Double.valueOf(item.getLocationX()), Double.valueOf(item.getLocationY()));
+if (isContainer(selectedItem.getValue()) && !selectedItem.getValue().equals("Null")) {
+    for (Container container : containerArrayList) {
+        if (container.getName().equals(selectedItem.getValue())) {
+            wantedvals.addAll(Double.valueOf(container.getLocationX()),Double.valueOf(container.getLocationY()));
+        }
+    }
+} else {
+    TreeItem<String> parentToSelectedItem = selectedItem.getParent();
+    for (Container container : containerArrayList) {
+        if (container.getName().equals(parentToSelectedItem.getValue())) {
+            for (Item item : container.getChildrenList()) {
+                if (item.getName().equals(selectedItem.getValue())) {
+                    wantedvals.addAll(Double.valueOf(item.getLocationX()),Double.valueOf(item.getLocationY()));
                 }
             }
         }
-        return wantedvals;
     }
+}
+return wantedvals;
+}
 
     public void visitItem() {
         Square.toFront();
