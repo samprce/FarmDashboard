@@ -202,6 +202,7 @@ public class MainController implements Initializable {
                             for (Item item : container.getChildrenList()) {
                                 if (item.getName().equals(selectedItem.getValue())) {
                                     item.setName(response);
+                                    selectedItem.setValue(response);
                                     removeContainerAndItemShapes();
                                 }
                             }
@@ -371,7 +372,7 @@ public class MainController implements Initializable {
 
     public void drawContainers() {
         for (Container container : containerArrayList) {
-            if (container.getName() != "Root") {
+            if (!container.getName().equals("Root")) {
                 Rectangle box = new Rectangle();
                 box.setX(container.getLocationX());
                 box.setY(container.getLocationY());
@@ -390,19 +391,21 @@ public class MainController implements Initializable {
 
     public void drawItemShapes() {
         for (Container container : containerArrayList) {
-            for (Item item : container.getChildrenList()){
-                Rectangle itemBox = new Rectangle();
-                itemBox.setX(item.getLocationX());
-                itemBox.setY(item.getLocationY());
-                itemBox.setWidth(item.getDimensionX());
-                itemBox.setHeight(item.getDimensionY());
-                itemBox.setFill(Color.WHITE);
-                itemBox.setStroke(Color.BLACK);
-                itemBox.setStrokeWidth(1);
-                Text text = new Text(item.getName());
-                text.setX(item.getLocationX() + 5);
-                text.setY(item.getLocationY() + 15);
-                shapesPane.getChildren().addAll(itemBox, text);
+            if (!container.getName().equals("Root")) {
+                for (Item item : container.getChildrenList()) {
+                    Rectangle itemBox = new Rectangle();
+                    itemBox.setX(item.getLocationX());
+                    itemBox.setY(item.getLocationY());
+                    itemBox.setWidth(item.getDimensionX());
+                    itemBox.setHeight(item.getDimensionY());
+                    itemBox.setFill(Color.WHITE);
+                    itemBox.setStroke(Color.BLACK);
+                    itemBox.setStrokeWidth(1);
+                    Text text = new Text(item.getName());
+                    text.setX(item.getLocationX() + 5);
+                    text.setY(item.getLocationY() + 15);
+                    shapesPane.getChildren().addAll(itemBox, text);
+                }
             }
         }
     }
@@ -439,34 +442,35 @@ public class MainController implements Initializable {
         items.setDisable(true);
     }
 
-    public ObservableList<Double> getdLocs(){
+    public ObservableList<Double> getdLocs() {
         String selectedItemValue = treeView.getSelectionModel().getSelectedItem().getValue();
- 
-        ObservableList<Double> wantedvals = FXCollections. observableArrayList();
-        
+
+        ObservableList<Double> wantedvals = FXCollections.observableArrayList();
+
         if (isContainer(selectedItemValue)) {
             for (Container container : containerArrayList) {
                 if (container.getName().equals(selectedItemValue)) {
-                    wantedvals.addAll(Double.valueOf(container.getLocationX()),Double.valueOf(container.getLocationY()));
+                    wantedvals.addAll(Double.valueOf(container.getLocationX()),
+                            Double.valueOf(container.getLocationY()));
                 }
             }
-        } else { 
+        } else {
             for (Item item : itemsArrayList) {
                 if (item.getName().equals(selectedItemValue)) {
-                    wantedvals.addAll(Double.valueOf(item.getLocationX()),Double.valueOf(item.getLocationY()));
+                    wantedvals.addAll(Double.valueOf(item.getLocationX()), Double.valueOf(item.getLocationY()));
                 }
             }
         }
         return wantedvals;
     }
 
-    public void visitItem(){
+    public void visitItem() {
         Square.toFront();
         ObservableList<Double> newDLoc = getdLocs();
-        Square.moveTrDir(newDLoc.get(0),newDLoc.get(1));
+        Square.moveTrDir(newDLoc.get(0), newDLoc.get(1));
     }
 
-    public void scanFarm(){
+    public void scanFarm() {
         Square.toFront();
         Square.coverFarm();
     }
