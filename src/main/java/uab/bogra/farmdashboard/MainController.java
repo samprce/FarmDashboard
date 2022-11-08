@@ -52,6 +52,9 @@ public class MainController implements Initializable {
     @FXML
     Text commandText;
 
+    @FXML
+    Text dispVal;
+
     DroneAnimation Square = new DroneAnimation();
 
     ArrayList<Container> containerArrayList = new ArrayList<>();
@@ -86,8 +89,10 @@ public class MainController implements Initializable {
                     TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
                     if (isContainer(selectedItem.getValue())) {
                         showContainerControls(containerCommandsPane, itemCommandsPane);
+                        goVisit(selectedItem);
                     } else if (!isContainer(selectedItem.getValue())) {
                         showItemControls(itemCommandsPane, containerCommandsPane);
+                        goVisit(selectedItem);
                     }
                 } catch (NullPointerException e) {
                     e.printStackTrace();
@@ -452,29 +457,29 @@ public class MainController implements Initializable {
 
     public ObservableList<Double> getdLocs() {
  
-ObservableList<Double> wantedvals = FXCollections. observableArrayList();
-TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
+    ObservableList<Double> wantedvals = FXCollections. observableArrayList();
+    TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
 
-if (isContainer(selectedItem.getValue()) && !selectedItem.getValue().equals("Null")) {
-    for (Container container : containerArrayList) {
-        if (container.getName().equals(selectedItem.getValue())) {
-            wantedvals.addAll(Double.valueOf(container.getLocationX()),Double.valueOf(container.getLocationY()));
+    if (isContainer(selectedItem.getValue()) && !selectedItem.getValue().equals("Null")) {
+        for (Container container : containerArrayList) {
+            if (container.getName().equals(selectedItem.getValue())) {
+                wantedvals.addAll(Double.valueOf(container.getLocationX()),Double.valueOf(container.getLocationY()));
+            }
         }
-    }
-} else {
-    TreeItem<String> parentToSelectedItem = selectedItem.getParent();
-    for (Container container : containerArrayList) {
-        if (container.getName().equals(parentToSelectedItem.getValue())) {
-            for (Item item : container.getChildrenList()) {
-                if (item.getName().equals(selectedItem.getValue())) {
-                    wantedvals.addAll(Double.valueOf(item.getLocationX()),Double.valueOf(item.getLocationY()));
+    } else {
+        TreeItem<String> parentToSelectedItem = selectedItem.getParent();
+        for (Container container : containerArrayList) {
+            if (container.getName().equals(parentToSelectedItem.getValue())) {
+                for (Item item : container.getChildrenList()) {
+                    if (item.getName().equals(selectedItem.getValue())) {
+                        wantedvals.addAll(Double.valueOf(item.getLocationX()),Double.valueOf(item.getLocationY()));
+                    }
                 }
             }
         }
     }
-}
-return wantedvals;
-}
+    return wantedvals;
+    }
 
     public void visitItem() {
         Square.toFront();
@@ -490,5 +495,58 @@ return wantedvals;
     public void goHome() {
         Square.toFront();
         Square.goHome();
+    }
+
+    //visitor
+    public void goVisit(TreeItem<String> selectedItem){
+        //visitor
+        Visitor viz = new Visitor();
+        
+        System.out.println("here!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println(selectedItem.getValue());
+
+        if (isContainer(selectedItem.getValue()) && !selectedItem.getValue().equals("Null")) {
+            for (Container container : containerArrayList) {
+                if (container.getName().equals(selectedItem.getValue())) {
+                    TreeItem<String> p1 = selectedItem.getParent();
+ 
+                    System.out.println("Parent value vv");
+                    System.out.println(p1.getValue());
+                    System.out.println("Container");
+                    System.out.println(container.getPrice());
+                    viz.visit(container);
+                    System.out.println("final val");
+                    System.out.println(viz.getVal());
+                    //second level
+                    ObservableList<TreeItem<String>> c1 = selectedItem.getChildren();
+                    for (Container cont2 : containerArrayList){
+                        for (TreeItem<String> c1i : c1){
+                            if (cont2.getName().equals(c1i.getValue())){
+                                viz.visit(cont2);
+
+                            }
+                        }
+                    }
+
+                }
+            }
+        } else {
+            TreeItem<String> parentToSelectedItem = selectedItem.getParent();
+            for (Container container : containerArrayList) {
+                if (container.getName().equals(parentToSelectedItem.getValue())) {
+                    for (Item item : container.getChildrenList()) {
+                        if (item.getName().equals(selectedItem.getValue())) {
+                            System.out.println("Item");
+                            System.out.println(item.getPrice());
+                            viz.visit(item);
+                            System.out.println("final val");
+                            System.out.println(viz.getVal());
+
+                        }
+                    }
+                }
+            }
+        }
+        dispVal.setText(Double.toString(viz.getVal()));
     }
 }
