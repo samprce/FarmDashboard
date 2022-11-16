@@ -55,6 +55,9 @@ public class MainController implements Initializable {
     @FXML
     Text dispVal;
 
+    @FXML
+    Button launchDrone;
+
     DroneAnimation Square = new DroneAnimation();
 
     ArrayList<Container> containerArrayList = new ArrayList<>();
@@ -548,5 +551,9 @@ public class MainController implements Initializable {
             }
         }
         dispVal.setText(Double.toString(viz.getVal()));
+    }
+
+    public void launchDrone(){
+        
     }
 }
