@@ -10,6 +10,7 @@ public class Container {
     private String name;
     private int locationX, locationY, dimensionX, dimensionY;
     private double price;
+    private double mVal;
     private Random random = new Random();
     private int rand = random.nextInt(500);
     private Rectangle box;
@@ -22,6 +23,7 @@ public class Container {
         this.dimensionX = 100;
         this.dimensionY = 100;
         this.price = 0.00;
+        this.mVal = 0.00;
         this.box = new Rectangle();
         this.children = new ArrayList<Item>();
     }
@@ -85,6 +87,19 @@ public class Container {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getmValToString() {
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        return format.format(this.mVal);
+    }
+    
+    public double getmVal() {
+        return this.mVal;
+    }
+
+    public void setmVal(double mVal) {
+        this.mVal = mVal;
     }
 
     public void addChild(Item item) {

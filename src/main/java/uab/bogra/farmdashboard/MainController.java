@@ -29,6 +29,7 @@ import javafx.util.Pair;
 import java.net.URL;
 import java.util.*;
 
+
 public class MainController implements Initializable {
 
     @FXML
@@ -53,10 +54,17 @@ public class MainController implements Initializable {
     Text commandText;
 
     @FXML
-    Text dispVal;
+    Text dispPrice;
+
+    @FXML
+    Text dispmVal;
 
     @FXML
     Button launchDrone;
+
+    //kw
+    //private static final Logger 		logger = Logger.getGlobal();
+	//private static final ConsoleHandler handler = new ConsoleHandler();
 
     DroneAnimation Square = new DroneAnimation();
 
@@ -458,6 +466,8 @@ public class MainController implements Initializable {
         items.setDisable(true);
     }
 
+
+    //drone animation
     public ObservableList<Double> getdLocs() {
  
     ObservableList<Double> wantedvals = FXCollections. observableArrayList();
@@ -505,21 +515,20 @@ public class MainController implements Initializable {
         //visitor
         Visitor viz = new Visitor();
         
-        System.out.println("here!!!!!!!!!!!!!!!!!!!!!!");
-        System.out.println(selectedItem.getValue());
+        //System.out.println("here!!!!!!!!!!!!!!!!!!!!!!");
+        //System.out.println(selectedItem.getValue());
 
         if (isContainer(selectedItem.getValue()) && !selectedItem.getValue().equals("Null")) {
             for (Container container : containerArrayList) {
                 if (container.getName().equals(selectedItem.getValue())) {
                     TreeItem<String> p1 = selectedItem.getParent();
- 
-                    System.out.println("Parent value vv");
-                    System.out.println(p1.getValue());
-                    System.out.println("Container");
-                    System.out.println(container.getPrice());
+                    //System.out.println("Parent value vv");
+                    //System.out.println(p1.getValue());
+                    //System.out.println("Container");
+                    //System.out.println(container.getPrice());
                     viz.visit(container);
-                    System.out.println("final val");
-                    System.out.println(viz.getVal());
+                    //System.out.println("final val");
+                    //System.out.println(viz.getVal());
                     //second level
                     ObservableList<TreeItem<String>> c1 = selectedItem.getChildren();
                     for (Container cont2 : containerArrayList){
@@ -539,18 +548,19 @@ public class MainController implements Initializable {
                 if (container.getName().equals(parentToSelectedItem.getValue())) {
                     for (Item item : container.getChildrenList()) {
                         if (item.getName().equals(selectedItem.getValue())) {
-                            System.out.println("Item");
-                            System.out.println(item.getPrice());
+                            //System.out.println("Item");
+                            //System.out.println(item.getPrice());
                             viz.visit(item);
-                            System.out.println("final val");
-                            System.out.println(viz.getVal());
+                            //System.out.println("final val");
+                            //System.out.println(viz.getVal());
 
                         }
                     }
                 }
             }
         }
-        dispVal.setText(Double.toString(viz.getVal()));
+        dispPrice.setText(Double.toString(viz.getPrice()));
+        dispmVal.setText(Double.toString(viz.getmVal()));
     }
 
     public void launchDrone(){
