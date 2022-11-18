@@ -9,7 +9,7 @@ import javafx.event.EventHandler;
 // Barn[container] > Milk Storage[container]
 // Command Center[container] > Drone[item]
 
-// addItem() ✅ delete() ✅ rename() ✅ changeLocation() ✅ changeDimension() ✅ changePrice() ✅
+// addItem() ✅ delete() ✅ rename() ✅ changeLocation() ✅ changeDimension() ✅ changePrice() ✅ changemVal() ✅
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -74,6 +74,7 @@ public class MainController implements Initializable {
     TextInputDialog renameDialog = new TextInputDialog();
     TextInputDialog newItemDialog = new TextInputDialog();
     TextInputDialog priceDialog = new TextInputDialog();
+    TextInputDialog mValDialog = new TextInputDialog();
 
     Image folderImage = new Image(getClass().getResourceAsStream("/folder.png"));
     Image fileImage = new Image(getClass().getResourceAsStream("/file.png"));
@@ -189,6 +190,40 @@ public class MainController implements Initializable {
                             for (Item item : container.getChildrenList()) {
                                 if (item.getName().equals(selectedItem.getValue())) {
                                     item.setPrice(Double.parseDouble(response));
+                                    removeContainerAndItemShapes();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        } catch (NullPointerException e) {
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.setContentText("You must select an item from the tree.");
+            alert.show();
+        }
+    }
+
+    public void changemVal() {
+        try {
+            TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
+            mValDialog.setTitle("Change Market Value");
+            mValDialog.setHeaderText("Enter the market value of the container:");
+            mValDialog.showAndWait().ifPresent(response -> {
+                if (isContainer(selectedItem.getValue())) {
+                    for (Container container : containerArrayList) {
+                        if (container.getName().equals(selectedItem.getValue())) {
+                            container.setmVal(Double.parseDouble(response));
+                            removeContainerAndItemShapes();
+                        }
+                    }
+                } else {
+                    TreeItem<String> parentToSelectedItem = selectedItem.getParent();
+                    for (Container container : containerArrayList) {
+                        if (container.getName().equals(parentToSelectedItem.getValue())) {
+                            for (Item item : container.getChildrenList()) {
+                                if (item.getName().equals(selectedItem.getValue())) {
+                                    item.setmVal(Double.parseDouble(response));
                                     removeContainerAndItemShapes();
                                 }
                             }
@@ -535,6 +570,26 @@ public class MainController implements Initializable {
                         for (TreeItem<String> c1i : c1){
                             if (cont2.getName().equals(c1i.getValue())){
                                 viz.visit(cont2);
+                                //level 3
+                                ObservableList<TreeItem<String>> c2 = c1i.getChildren();
+                                for (Container cont3 : containerArrayList){
+                                    for (TreeItem<String> c2i : c2){
+                                        if (cont3.getName().equals(c2i.getValue())){
+                                            viz.visit(cont3);
+                                            //level 4
+                                            ObservableList<TreeItem<String>> c3 = c2i.getChildren();
+                                            for (Container cont4 : containerArrayList){
+                                                for (TreeItem<String> c3i : c3){
+                                                    if (cont4.getName().equals(c3i.getValue())){
+                                                        viz.visit(cont4);
+                                                        //level 5 would go here
+                        
+                                                    }
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
 
                             }
                         }
