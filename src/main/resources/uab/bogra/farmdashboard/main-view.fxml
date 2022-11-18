@@ -25,8 +25,9 @@
                         <Button layoutX="121.0" layoutY="93.0" mnemonicParsing="false" onAction="#rename" prefHeight="26.0" prefWidth="253.0" text="Rename" />
                         <Button layoutX="121.0" layoutY="119.0" mnemonicParsing="false" onAction="#changeLocation" prefHeight="26.0" prefWidth="253.0" text="Change Location" />
                         <Button layoutX="121.0" layoutY="145.0" mnemonicParsing="false" onAction="#changePrice" prefHeight="26.0" prefWidth="253.0" text="Change Price" />
-                        <Button layoutX="121.0" layoutY="171.0" mnemonicParsing="false" onAction="#changeDimension" prefHeight="26.0" prefWidth="253.0" text="Change Dimensions" />
-                        <Button layoutX="121.0" layoutY="197.0" mnemonicParsing="false" onAction="#addItem" prefHeight="26.0" prefWidth="253.0" text="Add Item">
+                        <Button layoutX="121.0" layoutY="171.0" mnemonicParsing="false" onAction="#changemVal" prefHeight="26.0" prefWidth="253.0" text="Change Market Value" />
+                        <Button layoutX="121.0" layoutY="197.0" mnemonicParsing="false" onAction="#changeDimension" prefHeight="26.0" prefWidth="253.0" text="Change Dimensions" />
+                        <Button layoutX="121.0" layoutY="223.0" mnemonicParsing="false" onAction="#addItem" prefHeight="26.0" prefWidth="253.0" text="Add Item">
                      <rotationAxis>
                         <Point3D x="-3.0" z="1.0" />
                      </rotationAxis>
@@ -60,8 +61,7 @@
                   </Label>
                   <Button layoutX="14.0" layoutY="56.0" mnemonicParsing="false" onAction="#scanFarm" prefHeight="25.0" prefWidth="157.0" text="Scan Farm" />
                   <Button layoutX="191.0" layoutY="56.0" mnemonicParsing="false" onAction="#visitItem" prefHeight="25.0" prefWidth="157.0" text="Visit Item / Item Container" />
-                  <Button layoutX="377.0" layoutY="56.0" mnemonicParsing="false" onAction="#goHome" prefHeight="25.0" prefWidth="157.0" text="Go Home" />
-                  <Button fx:id="launchDrone" layoutX="191.0" layoutY="32.0" mnemonicParsing="false" onAction="#launchDrone" prefHeight="26.0" prefWidth="157.0" text="Launch Drone" />
+                  <Button fx:id="launchDrone" layoutX="377.0" layoutY="56.0" mnemonicParsing="false" onAction="#launchDrone" prefHeight="26.0" prefWidth="157.0" text="Launch Drone" />
                </children>
             </AnchorPane>
             <Text layoutX="91.0" layoutY="603.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Purchase Price" wrappingWidth="328.21630859375" />
