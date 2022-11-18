@@ -38,18 +38,50 @@ public class DroneAnimation extends Pane {
         rotate.play();
     }
 
-    // used for individual movements
-    // adjusts by given x and y amounts
-    // used for the UDLR commands, which are a combo of 0 and 10
-    public void moveTr(int xval, int yval) {
-        TranslateTransition moveTransS = new TranslateTransition();
-        moveTransS.setByX(xval);
-        moveTransS.setByY(yval);
-        moveTransS.setDuration(Duration.millis(500));
-        moveTransS.setCycleCount(1);
-        moveTransS.setNode(rectangle);
-        moveTransS.play();
+    public void moveTrDir(Double toX, Double toY) {
+        Path path = new Path();
+        path.getElements().add(new MoveTo(0f, 0f));
+
+
+        //path to
+        LineTo lineH = new LineTo();
+        lineH.setX(toX);
+        lineH.setY(0);
+        path.getElements().add(lineH);
+
+        LineTo lineV = new LineTo();
+        lineV.setX(toX);
+        lineV.setY(toY);
+        path.getElements().add(lineV);
+
+        //rotate
+
+        //path back
+
+        LineTo lineVR = new LineTo();
+        lineVR.setX(toX);
+        lineVR.setY(0);
+        path.getElements().add(lineVR);
+
+        LineTo lineHR = new LineTo();
+        lineHR.setX(0);
+        lineHR.setY(0);
+        path.getElements().add(lineHR);
+
+
+        PathTransition pathTransition = new PathTransition();
+        pathTransition.setDuration(Duration.millis(15000));
+        pathTransition.setNode(rectangle);
+        pathTransition.setPath(path);
+        pathTransition.setOrientation(OrientationType.ORTHOGONAL_TO_TANGENT);
+        pathTransition.setCycleCount(1);
+        pathTransition.play();
+
+
     }
+
+    //original move to direct code
+    /* 
 
     // move to direct spot
     // takes doubles as input for where to move X and Y
@@ -72,6 +104,7 @@ public class DroneAnimation extends Pane {
         moveTrans.setNode(rectangle);
         moveTrans.play();
     }
+    */
 
     // go to origin
     // need to implement to pick up 'home base' location instead
@@ -144,6 +177,18 @@ public class DroneAnimation extends Pane {
 
     // here down not currently used
 
+    // used for individual movements
+    // adjusts by given x and y amounts
+    // used for the UDLR commands, which are a combo of 0 and 10
+    public void moveTr(int xval, int yval) {
+        TranslateTransition moveTransS = new TranslateTransition();
+        moveTransS.setByX(xval);
+        moveTransS.setByY(yval);
+        moveTransS.setDuration(Duration.millis(500));
+        moveTransS.setCycleCount(1);
+        moveTransS.setNode(rectangle);
+        moveTransS.play();
+    }
     // move to specific spot
     // mostly for testing
     public void moveDir() {
