@@ -25,11 +25,9 @@ Add Item - will allow the user to add an Item to the IC that the current Item be
 Delete - allows user to delete an I
 
 The Drone starts at the command center in the upper left corner and from there has 3 options:
-Scan Farm, Visit Item/Item Container, and Go Home
+Scan Farm, Visit Item/Item Container
 Scan Farm:
-Return the Drone to Command Center (Go Home command) prior to running Scan Farm
 Scan Farm command will run the drone across the farm and then return it back to the Command Center
 Visit Item/Item Container:
-This will take the drone from its current location to the selected Item/Item Container
-Go Home:
-This will return the drone to the command center
+This will take the drone from its current location to the selected Item/Item Container then return to its original location
+
