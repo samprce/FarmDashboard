@@ -25,7 +25,7 @@ public class DroneAnimation extends Pane {
         getChildren().add(rectangle);
     }
 
-    // rotate drone takes old oreintation oldDir and new Dir and rototes image
+    // rotate drone takes old orientation oldDir and new Dir and rototes image
     // accordingly
     // if buttons pressed too fast can cause wonky alignment
     // down to right configuration causes spin first, could improve
@@ -42,8 +42,13 @@ public class DroneAnimation extends Pane {
         Path path = new Path();
         path.getElements().add(new MoveTo(0f, 0f));
 
+        LineTo lineT = new LineTo();
+        lineT.setX(toX);
+        lineT.setY(toY);
+        path.getElements().add(lineT);
 
         //path to
+        /* //this code is for horizontal then verticle movement
         LineTo lineH = new LineTo();
         lineH.setX(toX);
         lineH.setY(0);
@@ -53,11 +58,18 @@ public class DroneAnimation extends Pane {
         lineV.setX(toX);
         lineV.setY(toY);
         path.getElements().add(lineV);
+        */
 
         //rotate
 
         //path back
 
+        LineTo lineB = new LineTo();
+        lineB.setX(0);
+        lineB.setY(0);
+        path.getElements().add(lineB);
+
+        /* 
         LineTo lineVR = new LineTo();
         lineVR.setX(toX);
         lineVR.setY(0);
@@ -67,7 +79,7 @@ public class DroneAnimation extends Pane {
         lineHR.setX(0);
         lineHR.setY(0);
         path.getElements().add(lineHR);
-
+        */
 
         PathTransition pathTransition = new PathTransition();
         pathTransition.setDuration(Duration.millis(15000));
