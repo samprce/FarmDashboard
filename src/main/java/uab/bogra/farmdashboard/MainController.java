@@ -26,7 +26,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
-
+import uab.bogra.farmdashboard.drone.TelloDrone;
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -78,6 +79,8 @@ public class MainController implements Initializable {
     //kw
     //private static final Logger 		logger = Logger.getGlobal();
 	//private static final ConsoleHandler handler = new ConsoleHandler();
+
+    TelloDrone tello;
 
     DroneAnimation Square = new DroneAnimation();
 
@@ -134,9 +137,17 @@ public class MainController implements Initializable {
         simButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
-            public void handle(ActionEvent event) {
+            public void handle(ActionEvent event){
                 if (visitRadioButton.isSelected()) {
-                    visitItem();
+                    try {
+                        visitItem();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }      
                 } else {
                     scanFarm();
                 }
@@ -149,7 +160,27 @@ public class MainController implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
-
+                if (visitRadioButton.isSelected()) {
+                    try {
+                        launchVisitItem();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }      
+                } else {
+                    try {
+                        launchScanFarm();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    };
+                }
             }
             
         });
@@ -571,7 +602,7 @@ public class MainController implements Initializable {
     return wantedvals;
     }
 
-    public void visitItem() {
+    public void visitItem() throws IOException, InterruptedException{
         Square.toFront();
         ObservableList<Double> newDLoc = getdLocs();
         Square.moveTrDir(newDLoc.get(0), newDLoc.get(1));
@@ -598,7 +629,7 @@ public class MainController implements Initializable {
         if (isContainer(selectedItem.getValue()) && !selectedItem.getValue().equals("Null")) {
             for (Container container : containerArrayList) {
                 if (container.getName().equals(selectedItem.getValue())) {
-                    TreeItem<String> p1 = selectedItem.getParent();
+                    //TreeItem<String> p1 = selectedItem.getParent();
                     //System.out.println("Parent value vv");
                     //System.out.println(p1.getValue());
                     //System.out.println("Container");
@@ -660,8 +691,73 @@ public class MainController implements Initializable {
         dispmVal.setText(Double.toString(viz.getmVal()));
     }
 
-    public void launchDrone(){
-        
+    public void launchVisitItem() throws IOException, InterruptedException{
+        try {
+            TreeItem<String> selectedItem = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
+                if (isContainer(selectedItem.getValue()) && !selectedItem.getValue().equals("Root")) {
+                    for (Container container : containerArrayList) {
+                        if (container.getName().equals(selectedItem.getValue())) {
+                            int selectedItemX = container.getLocationX();
+                            int selectedItemY = container.getLocationY();
+                            tello = new TelloDrone();
+                            tello.activateSDK();
+                            tello.takeoff();
+                            tello.hoverInPlace(1);
+                            tello.gotoXY(selectedItemX, selectedItemY, 1);
+                            tello.hoverInPlace(2);
+                            tello.turnCCW(360);
+                            tello.hoverInPlace(2);
+                            tello.gotoXY(-(selectedItemX), -(selectedItemY), 1);
+                            tello.hoverInPlace(1);
+                            tello.land();
+                        }
+                    }
+                } else {
+                    TreeItem<String> parentToSelectedItem = selectedItem.getParent();
+                    for (Container container : containerArrayList) {
+                        if (container.getName().equals(parentToSelectedItem.getValue())) {
+                            for (Item item : container.getChildrenList()) {
+                                if (item.getName().equals(selectedItem.getValue())) {
+                                    int selectedItemX = item.getLocationX();
+                                    int selectedItemY = item.getLocationY();
+                                    tello = new TelloDrone();
+                                    tello.activateSDK();
+                                    tello.takeoff();
+                                    tello.hoverInPlace(1);
+                                    tello.gotoXY(selectedItemX, selectedItemY, 1);
+                                    tello.hoverInPlace(2);
+                                    tello.turnCCW(360);
+                                    tello.hoverInPlace(2);
+                                    tello.gotoXY(-(selectedItemX), -(selectedItemY), 1);
+                                    tello.hoverInPlace(1);
+                                    tello.land();
+                                }
+                            }
+                        }
+                    }
+                }
+        } catch (NullPointerException e) {
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.setContentText("You must select an item from the tree.");
+            alert.show();
+        }
+    }
+
+    public void launchScanFarm() throws IOException, InterruptedException{
+        tello = new TelloDrone();
+        tello.activateSDK();
+        tello.takeoff();
+        tello.hoverInPlace(1);
+        tello.flyForward(40);
+        tello.turnCCW(90);
+        tello.flyForward(20);
+        tello.turnCCW(90);
+        tello.flyForward(40);
+        tello.turnCW(90);
+        tello.flyForward(20);
+        tello.turnCW(90);
+        tello.hoverInPlace(1);
+        tello.land();
     }
 
 }
