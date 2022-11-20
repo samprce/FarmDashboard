@@ -2,6 +2,7 @@ package uab.bogra.farmdashboard;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 // Root
@@ -62,6 +63,18 @@ public class MainController implements Initializable {
     @FXML
     Button launchDrone;
 
+    @FXML
+    RadioButton visitRadioButton;
+
+    @FXML
+    RadioButton scanRadioButton;
+
+    @FXML
+    Button simButton;
+
+    @FXML
+    Button launchButton;
+
     //kw
     //private static final Logger 		logger = Logger.getGlobal();
 	//private static final ConsoleHandler handler = new ConsoleHandler();
@@ -110,6 +123,35 @@ public class MainController implements Initializable {
                     e.printStackTrace();
                 }
             }
+        });
+
+        ToggleGroup radioToggles = new ToggleGroup();
+        visitRadioButton.setToggleGroup(radioToggles);
+        scanRadioButton.setToggleGroup(radioToggles);
+        scanRadioButton.setSelected(true);
+
+        // Code for sim on button press goes here
+        simButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                if (visitRadioButton.isSelected()) {
+                    visitItem();
+                } else {
+                    scanFarm();
+                }
+            }
+            
+        });
+
+        // Code for physical drone logic on button press goes here 
+        launchButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+            
         });
     }
 
@@ -621,4 +663,5 @@ public class MainController implements Initializable {
     public void launchDrone(){
         
     }
+
 }
