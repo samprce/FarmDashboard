@@ -2,8 +2,7 @@
 Readme
 main github located at:
 https://github.com/samprce/app-farm-dashboard
-Please use this github for Term project–Design and Implementation-Part 2:
-https://github.com/samprce/app-farm-dashboard/tree/aa5e2f8833a4404cb70cf1d44782b7a28900a824
+Please use github for Term project–Design and Implementation-Part 2 as of end of day 11/21/2022 (correct link will be posted on canvas)
 
 In app-farm-dashboard/src/main/java/uab/bogra/farmdashboard/
 Run MainController.java
