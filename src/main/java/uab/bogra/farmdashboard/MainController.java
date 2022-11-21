@@ -62,9 +62,6 @@ public class MainController implements Initializable {
     Text dispmVal;
 
     @FXML
-    Button launchDrone;
-
-    @FXML
     RadioButton visitRadioButton;
 
     @FXML

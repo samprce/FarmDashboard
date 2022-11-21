@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uab.bogra.farmdashboard.MainController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uab.bogra.farmdashboard.MainController">
     <children>
         <AnchorPane fx:id="hierarchyPane" prefHeight="900.0" prefWidth="460.0">
             <children>
@@ -62,7 +62,6 @@
                   </Label>
                   <Button disable="true" layoutX="14.0" layoutY="56.0" mnemonicParsing="false" onAction="#scanFarm" prefHeight="25.0" prefWidth="157.0" text="Scan Farm" visible="false" />
                   <Button disable="true" layoutX="191.0" layoutY="56.0" mnemonicParsing="false" onAction="#visitItem" prefHeight="25.0" prefWidth="157.0" text="Visit Item / Item Container" visible="false" />
-                  <Button fx:id="launchDrone" disable="true" layoutX="377.0" layoutY="56.0" mnemonicParsing="false" onAction="#launchDrone" prefHeight="26.0" prefWidth="157.0" text="Launch Drone" visible="false" />
                   <RadioButton fx:id="visitRadioButton" layoutX="195.0" layoutY="60.0" mnemonicParsing="false" text="Visit Item/Item Container" />
                   <RadioButton fx:id="scanRadioButton" contentDisplay="CENTER" layoutX="195.0" layoutY="106.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="154.0" text="Scan Farm" />
                   <Button fx:id="simButton" layoutX="139.0" layoutY="157.0" mnemonicParsing="false" text="Run Simulation" />
