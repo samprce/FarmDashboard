@@ -1,5 +1,7 @@
 package uab.bogra.farmdashboard;
 
+import java.io.IOException;
+
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
@@ -10,7 +12,9 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.*;
 import javafx.util.Duration;
 
-public class DroneAnimation extends Pane {
+
+
+public class DroneAnimation extends Pane implements FlightControllable {
     Image image = new Image(
             "/drone.png");
     Rectangle rectangle = new Rectangle(0, 0, 50, 50);
@@ -25,7 +29,7 @@ public class DroneAnimation extends Pane {
         getChildren().add(rectangle);
     }
 
-    // rotate drone takes old orientation oldDir and new Dir and rototes image
+    // rotate drone takes old orientation oldDir and new Dir and rotates image
     // accordingly
     // if buttons pressed too fast can cause wonky alignment
     // down to right configuration causes spin first, could improve
@@ -207,8 +211,10 @@ public class DroneAnimation extends Pane {
         moveTrDir(200.0, 200.0);
     }
 
+
     // move left
     // check if orientation has changed, rotate accordingly
+
     public void moveLeft() {
 
         if (recOr != 180) {
@@ -246,4 +252,130 @@ public class DroneAnimation extends Pane {
         moveTr(0, 10);
     }
 
+
+    //Refactoring Here down:
+    @Override
+    public void takeoff() throws IOException{
+        //not needed in simulation
+    }
+
+    @Override
+	public void land() throws IOException{
+        //not needed in simulation
+    }
+
+    @Override
+	public void increaseAltitude(int up) throws IOException{
+        //not needed in simulation
+    }
+
+    @Override
+	public void decreaseAltitude(int down) throws IOException{
+        //not needed in simulation
+    }
+
+    @Override
+	public void flyForward(int front) throws IOException{
+        if (recOr != 90) {
+            rotDrone(recOr, 90);
+            recOr = 90;
+        }
+        // rectangle.setY(rectangle.getY() - 10);
+        moveTr(0, -10);
+    }
+
+    @Override
+	public void flyLeft(int left) throws IOException{
+        if (recOr != 180) {
+            rotDrone(recOr, 180);
+            recOr = 180;
+        }
+        // rectangle.setX(rectangle.getX() - 10);
+        moveTr(-10, 0);
+    }
+
+    @Override
+	public void flyRight(int right) throws IOException{
+        if (recOr != 0) {
+            rotDrone(recOr, 0);
+            recOr = 0;
+    }
+        // rectangle.setX(rectangle.getX() + 10);
+        moveTr(10, 0);  
+    }
+
+    @Override
+	public void turnCW(int degrees) throws IOException{
+        RotateTransition rotate = new RotateTransition();
+        rotate.setDuration(Duration.millis(1000));
+        rotate.setByAngle(degrees); // could optimize so doesnt spin as much later
+        rotate.setCycleCount(1);
+        rotate.setNode(rectangle);
+        rotate.play();
+    }
+    
+
+    @Override
+	public void turnCCW(int degrees) throws IOException{
+        RotateTransition rotate = new RotateTransition();
+        rotate.setDuration(Duration.millis(1000));
+        rotate.setByAngle(degrees); // could optimize so doesnt spin as much later
+        rotate.setCycleCount(1);
+        rotate.setNode(rectangle);
+        rotate.play();
+    }
+
+    @Override
+	public int getFlightTime() throws IOException{
+        return 0;
+        //not needed in simulation
+    }
+
+    @Override
+	public int getheight() throws IOException{
+        return 0;
+        //not needed in simulation
+    }
+
+    @Override
+	public int getAttitudePitch() throws IOException{
+        return 0;
+        //not needed in simulation
+    }
+
+    @Override
+	public int getAttitudeRoll() throws IOException{
+        return 0;
+        //not needed in simulation
+    }
+
+    @Override
+	public int getAttitudeYaw() throws IOException{
+        return 0;
+        //not needed in simulation
+    }
+
+    @Override
+	public double getAccelerationX() throws IOException{
+        return 0.0;
+        //not needed in simulation
+    }
+
+    @Override
+	public double getAccelerationY() throws IOException{
+        return 0.0;
+        //not needed in simulation
+    }
+
+    @Override
+	public double getAccelerationZ() throws IOException{
+        return 0.0;
+        //not needed in simulation
+    }
+
+    @Override
+	public int getTOF() throws IOException{
+        return 0;
+        //not needed in simulation
+    }
 }

@@ -26,7 +26,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
-import uab.bogra.farmdashboard.drone.TelloDrone;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
