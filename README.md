@@ -31,3 +31,11 @@ Scan Farm command will run the drone across the farm and then return it back to 
 Visit Item/Item Container:
 This will take the drone from its current location to the selected Item/Item Container then return to its original location
 
+Adapter Pattern is implemented in DroneAnimation.java and TelloDrone.java, which extends MultiRotorDrone.java
+The following java classes were provided from the professor for flying the drone:
+Constants.java
+DroneController.java
+FlightControllable.java
+MultiRotorDrone.java
+PhysicalDrone.java
+TelloDrone.java
