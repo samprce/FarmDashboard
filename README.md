@@ -38,7 +38,7 @@ There is an option to switch between running the simulated and actual drone to p
 
 App.Java and AppRunner.java run the application and ensure only a single instance of the program can run at a time.
 
-The visitor Pattern is implemented through Visitor.java
+The visitor Pattern is implemented through Visitor.java and will return either the value (both Price and Market Value) of an Item, or the sum total (both Price and Market Value) of all of the items within an item container
 
 Adapter Pattern is implemented in DroneAnimation.java and TelloDrone.java, which extends MultiRotorDrone.java
 
