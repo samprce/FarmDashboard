@@ -27,8 +27,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.SocketException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.*;
 
 
@@ -94,6 +97,24 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            tello = new TelloDrone();
+        } catch (SocketException e2) {
+            // TODO Auto-generated catch block
+            e2.printStackTrace();
+        } catch (UnknownHostException e2) {
+            // TODO Auto-generated catch block
+            e2.printStackTrace();
+        } catch (FileNotFoundException e2) {
+            // TODO Auto-generated catch block
+            e2.printStackTrace();
+        }
+        try {
+            tello.activateSDK();
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
         containerCommandsPane.setVisible(true);
         containerCommandsPane.setDisable(false);
         itemCommandsPane.setVisible(false);
@@ -696,16 +717,13 @@ public class MainController implements Initializable {
                         if (container.getName().equals(selectedItem.getValue())) {
                             int selectedItemX = container.getLocationX();
                             int selectedItemY = container.getLocationY();
-                            tello = new TelloDrone();
-                            tello.activateSDK();
                             tello.takeoff();
-                            tello.hoverInPlace(1);
-                            tello.gotoXY(selectedItemX, selectedItemY, 1);
                             tello.hoverInPlace(2);
+                            tello.gotoXY(selectedItemX, -(selectedItemY), 1);
                             tello.turnCCW(360);
                             tello.hoverInPlace(2);
-                            tello.gotoXY(-(selectedItemX), -(selectedItemY), 1);
-                            tello.hoverInPlace(1);
+                            tello.gotoXY(-(selectedItemX), selectedItemY, 1);
+                            tello.hoverInPlace(2);
                             tello.land();
                         }
                     }
@@ -717,16 +735,13 @@ public class MainController implements Initializable {
                                 if (item.getName().equals(selectedItem.getValue())) {
                                     int selectedItemX = item.getLocationX();
                                     int selectedItemY = item.getLocationY();
-                                    tello = new TelloDrone();
-                                    tello.activateSDK();
                                     tello.takeoff();
-                                    tello.hoverInPlace(1);
-                                    tello.gotoXY(selectedItemX, selectedItemY, 1);
                                     tello.hoverInPlace(2);
+                                    tello.gotoXY(selectedItemX, -(selectedItemY), 1);
                                     tello.turnCCW(360);
                                     tello.hoverInPlace(2);
-                                    tello.gotoXY(-(selectedItemX), -(selectedItemY), 1);
-                                    tello.hoverInPlace(1);
+                                    tello.gotoXY(-(selectedItemX), selectedItemY, 1);
+                                    tello.hoverInPlace(2);
                                     tello.land();
                                 }
                             }
@@ -741,8 +756,6 @@ public class MainController implements Initializable {
     }
 
     public void launchScanFarm() throws IOException, InterruptedException{
-        tello = new TelloDrone();
-        tello.activateSDK();
         tello.takeoff();
         tello.hoverInPlace(1);
         tello.flyForward(40);
