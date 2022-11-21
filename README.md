@@ -2,8 +2,7 @@
 Readme
 main github located at:
 https://github.com/samprce/app-farm-dashboard
-Please use this github for Term project–Design and Implementation-Part 2:
-@@@ insert here
+Please use github for Term project–Design and Implementation-Part 2 as of end of day 11/21/2022 (correct link will be posted on canvas)
 
 In app-farm-dashboard/src/main/java/uab/bogra/farmdashboard/
 Run MainController.java
@@ -38,9 +37,10 @@ There is an option to switch between running the simulated and actual drone to p
 
 App.Java and AppRunner.java run the application and ensure only a single instance of the program can run at a time.
 
-The visitor Pattern is implemented through Visitor.java
+The visitor Pattern is implemented through Visitor.java and will return either the value (both Price and Market Value) of an Item, or the sum total (both Price and Market Value) of all of the items within an item container
 
 Adapter Pattern is implemented in DroneAnimation.java and TelloDrone.java, which extends MultiRotorDrone.java
+The Scan Farm function can be set to run for a 32x24ft area, but is currently set for a more limited scale for time/workable presentation area cosntraints
 
 The following java classes were provided from the professor for flying the drone:
 Constants.java
