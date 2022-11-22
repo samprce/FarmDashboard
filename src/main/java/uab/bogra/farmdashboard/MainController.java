@@ -82,7 +82,7 @@ public class MainController implements Initializable {
 
     TelloDrone tello;
 
-    DroneAnimation Square = new DroneAnimation();
+    DroneAnimationAdapter Square = new DroneAnimationAdapter();
 
     ArrayList<Container> containerArrayList = new ArrayList<>();
     ArrayList<Item> itemsArrayList = new ArrayList<>();

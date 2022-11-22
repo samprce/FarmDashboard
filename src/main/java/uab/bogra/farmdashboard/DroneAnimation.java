@@ -23,6 +23,8 @@ public class DroneAnimation extends Pane implements FlightControllable {
     ImagePattern imagePattern = new ImagePattern(image);
     Path path = new Path();
 
+    protected DroneAnimation controller;
+
     DroneAnimation() {
         rectangle.setFill(imagePattern);
         recOr = 90;
