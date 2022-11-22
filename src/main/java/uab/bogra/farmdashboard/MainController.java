@@ -719,10 +719,10 @@ public class MainController implements Initializable {
                             int selectedItemY = container.getLocationY();
                             tello.takeoff();
                             tello.hoverInPlace(2);
-                            tello.gotoXY(selectedItemX, -(selectedItemY), 1);
+                            tello.gotoXY(selectedItemY, -(selectedItemX), 1);
                             tello.turnCCW(360);
                             tello.hoverInPlace(2);
-                            tello.gotoXY(-(selectedItemX), selectedItemY, 1);
+                            tello.gotoXY(-(selectedItemY), selectedItemX, 1);
                             tello.hoverInPlace(2);
                             tello.land();
                         }
@@ -737,10 +737,10 @@ public class MainController implements Initializable {
                                     int selectedItemY = item.getLocationY();
                                     tello.takeoff();
                                     tello.hoverInPlace(2);
-                                    tello.gotoXY(selectedItemX, -(selectedItemY), 1);
+                                    tello.gotoXY(selectedItemY, -(selectedItemX), 1);
                                     tello.turnCCW(360);
                                     tello.hoverInPlace(2);
-                                    tello.gotoXY(-(selectedItemX), selectedItemY, 1);
+                                    tello.gotoXY(-(selectedItemY), selectedItemX, 1);
                                     tello.hoverInPlace(2);
                                     tello.land();
                                 }
@@ -758,15 +758,20 @@ public class MainController implements Initializable {
     public void launchScanFarm() throws IOException, InterruptedException{
         tello.takeoff();
         tello.hoverInPlace(1);
-        tello.flyForward(40);
-        tello.turnCCW(90);
-        tello.flyForward(20);
-        tello.turnCCW(90);
-        tello.flyForward(40);
-        tello.turnCW(90);
-        tello.flyForward(20);
-        tello.turnCW(90);
+        tello.flyLeft(100);
         tello.hoverInPlace(1);
+        for (int i = 0; i < 5; i++){
+            tello.flyForward(10);
+            tello.turnCW(90);
+            tello.flyForward(100);
+            tello.turnCCW(90);
+            tello.flyForward(10);
+            tello.turnCCW(90);
+            tello.flyForward(100);
+            tello.turnCW(90);
+        }
+        tello.flyBackward(100);
+        tello.flyRight(100);
         tello.land();
     }
 
