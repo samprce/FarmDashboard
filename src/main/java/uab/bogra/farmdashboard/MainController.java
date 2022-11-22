@@ -82,7 +82,7 @@ public class MainController implements Initializable {
 
     TelloDrone tello;
 
-    DroneAnimationAdapter Square = new DroneAnimationAdapter();
+    DroneAnimation Square = new DroneAnimationAdapter();
 
     ArrayList<Container> containerArrayList = new ArrayList<>();
     ArrayList<Item> itemsArrayList = new ArrayList<>();
@@ -623,17 +623,17 @@ public class MainController implements Initializable {
     public void visitItem() throws IOException, InterruptedException{
         Square.toFront();
         ObservableList<Double> newDLoc = getdLocs();
-        Square.moveTrDirAdapter(newDLoc.get(0), newDLoc.get(1));
+        Square.moveTrDir(newDLoc.get(0), newDLoc.get(1));
     }
 
     public void scanFarm() {
         Square.toFront();
-        Square.coverFarmAdapter();
+        Square.coverFarm();
     }
 
     public void goHome() {
         Square.toFront();
-        Square.goHomeAdapter();
+        Square.goHome();
     }
 
     //visitor
