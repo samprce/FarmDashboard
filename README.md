@@ -40,7 +40,8 @@ App.Java and AppRunner.java run the application and ensure only a single instanc
 The visitor Pattern is implemented through Visitor.java and will return either the value (both Price and Market Value) of an Item, or the sum total (both Price and Market Value) of all of the items within an item container
 
 Adapter Pattern is implemented in DroneAnimationAdapter.java
-The Scan Farm function can be set to run for a 32x24ft area, but is currently set for a more limited scale for time/workable presentation area cosntraints
+The Scan Farm function can be set to run for a 32x24ft area, but is currently set for a more limited scale for time/workable presentation area constraints
+For the sake of not having the drone take forever to do a scan we simulated our drone animation by having the physical drone only scan a 100x100 grid opposed to 800x600
 
 The following java classes were provided from the professor for flying the drone:
 Constants.java
