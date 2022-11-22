@@ -623,17 +623,17 @@ public class MainController implements Initializable {
     public void visitItem() throws IOException, InterruptedException{
         Square.toFront();
         ObservableList<Double> newDLoc = getdLocs();
-        Square.moveTrDir(newDLoc.get(0), newDLoc.get(1));
+        Square.moveTrDirAdapter(newDLoc.get(0), newDLoc.get(1));
     }
 
     public void scanFarm() {
         Square.toFront();
-        Square.coverFarm();
+        Square.coverFarmAdapter();
     }
 
     public void goHome() {
         Square.toFront();
-        Square.goHome();
+        Square.goHomeAdapter();
     }
 
     //visitor

@@ -7,99 +7,66 @@ public class DroneAnimationAdapter extends DroneAnimation{
     public DroneAnimationAdapter(){
         this.controller = new DroneAnimation();
     }
-
-    @Override
-    public void rotDrone(int oldDir, int newDir) {
+    public void rotDroneAdapter(int oldDir, int newDir) {
         this.controller.rotDrone(oldDir, newDir);
     }
-
-    @Override
-    public void moveTrDir(Double toX, Double toY) {
+    public void moveTrDirAdapter(Double toX, Double toY) {
         this.controller.moveTrDir(toX, toY);
     }
-
-    @Override
-    public void goHome() {
+    public void goHomeAdapter() {
         this.controller.goHome();
     }
-
-    @Override
-    public void coverFarm() {
+    public void coverFarmAdapter() {
         this.controller.coverFarm();
     }
-
-    @Override
-    public void moveTr(int xval, int yval) {
+    public void moveTrAdapter(int xval, int yval) {
         this.controller.moveTr(xval, yval);
     }
-
-    @Override
-    public void moveDir() {
+    public void moveDirAdapter() {
         moveTrDir(200.0, 200.0);
     }
-
-    @Override
-    public void moveLeft() {
+    public void moveLeftAdapter() {
         this.controller.moveLeft();
     }
-    @Override
-    public void moveRight() {
+    public void moveRightAdapter() {
         this.controller.moveRight();
     }
-    @Override
-    public void moveUp() {
+    public void moveUpAdapter() {
         this.controller.moveUp();
     }
-    @Override
-    public void moveDown() {
+    public void moveDownAdapter() {
         this.controller.moveDown();
     }
-
-
     //Refactoring Here down:
     @Override
     public void takeoff() throws IOException{
         //not needed in simulation
     }
-
     @Override
 	public void land() throws IOException{
         //not needed in simulation
     }
-
     @Override
 	public void increaseAltitude(int up) throws IOException{
         //not needed in simulation
     }
-
     @Override
 	public void decreaseAltitude(int down) throws IOException{
         //not needed in simulation
     }
-
-    @Override
-	public void flyForward(int front) throws IOException{
+	public void flyForwardAdapter(int front) throws IOException{
         this.controller.flyForward(front);
     }
-
-    @Override
-	public void flyLeft(int left) throws IOException{
+	public void flyLeftAdapter(int left) throws IOException{
         this.controller.flyLeft(left);
     }
-
-    @Override
-	public void flyRight(int right) throws IOException{
+	public void flyRightAdapter(int right) throws IOException{
         this.controller.flyRight(right);  
     }
-
-    @Override
-	public void turnCW(int degrees) throws IOException{
+	public void turnCWAdapter(int degrees) throws IOException{
         this.controller.turnCW(degrees);
     }
-    
-
-    @Override
-	public void turnCCW(int degrees) throws IOException{
+	public void turnCCWAdapter(int degrees) throws IOException{
         this.controller.turnCCW(degrees);
     }
 
